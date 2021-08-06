@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+using FreeloadMap.Lib.Data;
+
+#error 加载时转化为绝对路径，保存时转化为相对路径
+
+namespace PictureSet
+{
+    public partial class MainWindow
+    {
+        public string BasePath { get; set; } = Environment.CurrentDirectory;
+
+        private void Button_SetBasePath_Click(object sender, RoutedEventArgs e)
+        {
+            SetBasePath();
+        }
+
+        private bool SetBasePath()
+        {
+            SetFolderBrowserDialog_SingleDirectory("Set Base Path");
+
+            if (folderBrowserDialog.ShowDialog() == Microsoft.WindowsAPICodePack.Dialogs.CommonFileDialogResult.Ok)
+            {
+                this.BasePath = folderBrowserDialog.FileName.Replace('\\', '/');
+                return true;
+            }
+            return false;
+        }
+    }
+}

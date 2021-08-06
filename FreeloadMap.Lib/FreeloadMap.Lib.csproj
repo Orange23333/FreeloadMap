@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net452</TargetFramework>
+		<!-- <TargetFrameworks>netcoreapp3.1;net452</TargetFrameworks> -->
+		<Company>Bisitsoft</Company>
+		<Copyright>Copyright © Bisitsoft 2021</Copyright>
+		<Authors>Orange233</Authors>
+		<PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+		<Description>Official website: https://www.ourorangenet.com .</Description>
+		<PackageReleaseNotes>Official website: https://www.ourorangenet.com .</PackageReleaseNotes>
+	</PropertyGroup>
+
+	<!--https://blog.csdn.net/sgmcumt/article/details/102510084-->
+
+	<!-- Need to conditionally bring in references for the .NET Core 3.1 target -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
+		<!-- <PackageReference Include="AngleSharp" Version="0.16.0" /> -->
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+	</ItemGroup>
+
+	<!-- Need to conditionally bring in references for the .NET Framework 4.5.2 target -->
+	<ItemGroup Condition="'$(TargetFramework)' == 'net452'">
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+
+</Project>

@@ -1,0 +1,53 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\img\AD_CN\CN_0002_新疆维吾尔自治区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0003_北京市.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0004_河北省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0005_天津市.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0006_辽宁省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0007_重庆市.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0008_四川省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0009_安徽省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0010_澳门特别行政区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0011_香港特别行政区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0012_广东省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0013_海南省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0014_台湾省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0015_福建省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0016_江西省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0017_湖南省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0018_广西壮族自治区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0019_贵州省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0020_云南省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0021_浙江省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0022_上海市.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0023_江苏省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0024_山东省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0025_河南省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0026_湖北省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0027_西藏自治区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0028_青海省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0029_甘肃省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0030_宁夏回族自治区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0031_内蒙古自治区.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0032_陕西省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0033_山西省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0034_吉林省.png" />
+    <None Include="wwwroot\img\AD_CN\CN_0035_黑龙江省.png" />
+    <None Include="wwwroot\img\AD_UK\UK_0000_Nordirland.png" />
+    <None Include="wwwroot\img\AD_UK\UK_0001_Schottland.png" />
+    <None Include="wwwroot\img\AD_UK\UK_0002_England.png" />
+    <None Include="wwwroot\img\AD_UK\UK_0003_Wales.png" />
+    <None Include="wwwroot\img\AD_UK\UK_0004_NotUK.png" />
+  </ItemGroup>
+
+</Project>
