@@ -27,7 +27,15 @@ namespace PictureSet
 
         public MainWindow()
         {
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionEventHandlerMethod;
+
             InitializeComponent();
+        }
+        public void UnhandledExceptionEventHandlerMethod(object sender, UnhandledExceptionEventArgs e)
+        {
+            Exception exception = (Exception)(e.ExceptionObject);
+            MessageBox.Show(exception.ToString(), "Error");
+            Environment.Exit(exception.HResult);
         }
 
         private void ThisWindow_Loaded(object sender, RoutedEventArgs e)

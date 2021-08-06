@@ -15,9 +15,10 @@
                 <TranslateTransform/>
             </TransformGroup>
         </Grid.RenderTransform>
-        <!-- 用Button来捕获焦点_Background -->
+        <!-- 用Button来捕获焦点_Background。但是这样无法精准选中，会被其他按钮覆盖 -->
         <Button x:Name="Button_Background" Opacity="0" Canvas.ZIndex="2099999999"/>
-        <Image x:Name="Image_Picture" Stretch="Uniform" Canvas.ZIndex="0"/>
+        <Image x:Name="Image_Picture" Stretch="Uniform" Canvas.ZIndex="0" Focusable="True"/>
+        <!-- 未解决按钮过大无法操作的问题。这需要重新设计UI -->
         <Button x:Name="Button_MovePicture" Content="移" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0" Width="16" Height="16" Visibility="Hidden" PreviewMouseLeftButtonDown="Button_MovePicture_PreviewMouseLeftButtonDown" PreviewMouseLeftButtonUp="Button_MovePicture_PreviewMouseLeftButtonUp" Canvas.ZIndex="2100000000"/>
         <Button x:Name="Button_DeletePicture" Content="删" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,0,0" Width="16" Height="16" Visibility="Hidden" Click="Button_DeletePicture_Click" Canvas.ZIndex="2100000000"/>
         <Button x:Name="Button_LiftingPictureZIndex" Content="升" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="0,0,0,0" Width="16" Height="16" Visibility="Hidden" Click="Button_LiftingPictureZIndex_Click" Canvas.ZIndex="2100000000"/>

@@ -74,6 +74,7 @@ namespace PictureSet
             PictureItemStructure[] loadData = PictureItemStructuresForLoad();
 
             this.PictureCanvas.Children.Clear();
+            this.pictureItems.Clear();
             foreach(PictureItemStructure pictureItemStructure in loadData)
             {
                 AddItem(pictureItemStructure);

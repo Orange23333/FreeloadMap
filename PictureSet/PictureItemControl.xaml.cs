@@ -59,6 +59,20 @@ namespace PictureSet
         {
             //Init_Bindings_PictureItemStructure();
             Init_Move();
+
+            this.MoveFinished += (object _sender, EventArgs _e) =>
+              {
+                  PictureItemControl pictureItemControl = (PictureItemControl)_sender;
+                  PictureItem pictureItem = pictureItemContainer.FindItem(pictureItemControl);
+
+                //#warning 此处没有必要调用PictureItem的API，会再设置一遍Control，可能引发循环设置问题，所以只设置Data。
+                //pictureItem.Position = pictureItemControl.PI_Position;
+                // CS1612: https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/compiler-messages/cs1612 {
+                PictureItemStructure pictureItemStructure = pictureItem.Data;
+                  pictureItemStructure.Position = new Tuple<double, double>(pictureItemControl.PI_Position.X, pictureItemControl.PI_Position.Y);
+                  pictureItem.Data = pictureItemStructure;
+                // }
+            };
         }
 
         private void Button_DeletePicture_Click(object sender, RoutedEventArgs e)

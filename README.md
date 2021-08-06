@@ -18,9 +18,9 @@ Main content.
 
 # FreeloadMap.Lib
 
-`FreeloadMap.Lib`里主要是`FreeloadMap.Lib.Data`下的`Picture Set 工程`（基于`Json`）文件的托管类和`图片物品`结构体。
+`FreeloadMap.Lib`里主要是`FreeloadMap.Lib.Data`下的`Picture Set 工程`（基于`JSON`）文件的托管类和`图片物品`结构体。
 
-The main things in the `FreeloadMap.Lib` are `Picture Set Project` (based on `Json`) Files warpper class and `Picture Item` Struct which under `FreeloadMap.Lib.Data`.
+The main things in the `FreeloadMap.Lib` are `Picture Set Project` (based on `JSON`) Files warpper class and `Picture Item` Struct which under `FreeloadMap.Lib.Data`.
 
 # PictureSet
 
