@@ -46,12 +46,13 @@ namespace PictureSet
                 _8i = -8;
                 for (i = 0; i < paths.Length; i++)
                 {
+                    string path = System.IO.Path.GetFullPath(paths[i]);
                     PictureItemControl pictureItem = new PictureItemControl(this);
                     pictureItem.MoveFinished += PictureItem_MoveFinished;
 
                     //_8i = i * 8;
                     _8i += 8;
-                    PictureItemStructure pictureItemStructure = PictureItemStructure.Create(mousePosition.X + _8i, mousePosition.Y + _8i, 0, paths[i]);
+                    PictureItemStructure pictureItemStructure = PictureItemStructure.Create(mousePosition.X + _8i, mousePosition.Y + _8i, 0, path);
                     AddItem(pictureItemStructure);
                 }
             }
@@ -83,7 +84,7 @@ namespace PictureSet
                 _8i = 0;
                 for (i = 0; i < picturePaths.Length; i++)
                 {
-                    string path = picturePaths[i].Replace('\\', '/');
+                    string path = System.IO.Path.GetFullPath(picturePaths[i]).Replace('\\', '/');
                     //_8i = i * 8;
                     _8i += 8;
                     AddItem(PictureItemStructure.Create(_8i, _8i, 0, path));

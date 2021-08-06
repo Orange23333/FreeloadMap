@@ -19,6 +19,7 @@ namespace PictureSet
 {
 #warning 未做：在container中的集体变换。
 #warning 未做：利用集体变换消除左上角空余
+#warning 似乎滑动条的文本框值可能无效
     //TA, Transform All
     public partial class MainWindow
     {

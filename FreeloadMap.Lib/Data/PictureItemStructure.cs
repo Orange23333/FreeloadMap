@@ -83,11 +83,13 @@ namespace FreeloadMap.Lib.Data
         }
         public static string GetAbsolutePath(string basePath, string relativePath)
         {
-            return new Uri(new Uri(basePath, UriKind.Absolute), relativePath).AbsoluteUri;
+            //return new Uri(new Uri(basePath, UriKind.Absolute), relativePath).AbsoluteUri;
+            return new Uri(new Uri(basePath, UriKind.Absolute), new Uri(relativePath, UriKind.Relative)).ToString();
         }
+        /// <param name="basePath">应为工程文件位置。</param>
         public static string GetRelativePath(string basePath, string absolutePath)
         {
-            return new Uri(absolutePath, UriKind.Absolute).MakeRelativeUri(new Uri(basePath, UriKind.Absolute)).ToString();
+            return new Uri(basePath, UriKind.Absolute).MakeRelativeUri(new Uri(absolutePath, UriKind.Absolute)).ToString(); // 测试结果这是对的，但我也不知道Uri这什么语法、原理。
         }
     }
 }

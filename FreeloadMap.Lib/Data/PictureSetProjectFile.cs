@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 
 namespace FreeloadMap.Lib.Data
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class PictureSetProjectFile
     {
         private string path = null;
@@ -30,7 +31,7 @@ namespace FreeloadMap.Lib.Data
 
         private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings()
         {
-            Formatting = Formatting.Indented
+            Formatting = Formatting.Indented,
         };
 
         //// 只检查是否操作，不与原文件对比是否有变动。
@@ -54,10 +55,11 @@ namespace FreeloadMap.Lib.Data
 
         public void Load(string path)
         {
-            PictureSetProjectFile pictureSetProjectFile = (PictureSetProjectFile)JsonConvert.DeserializeObject(System.IO.File.ReadAllText(path), jsonSerializerSettings);
+            this.path = path;
+
+            PictureSetProjectFile pictureSetProjectFile = (PictureSetProjectFile)JsonConvert.DeserializeObject<PictureSetProjectFile>(System.IO.File.ReadAllText(path), jsonSerializerSettings);
             this.ProjectVersion = pictureSetProjectFile.ProjectVersion;
             this.PictureItems = pictureSetProjectFile.PictureItems;
-            this.path = path;
             //ResetHasChanged();
         }
 
@@ -66,8 +68,9 @@ namespace FreeloadMap.Lib.Data
         /// </remarks>
         public void Save(string path)
         {
-            System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(this, jsonSerializerSettings));
             this.path = path;
+
+            System.IO.File.WriteAllText(path, JsonConvert.SerializeObject(this, jsonSerializerSettings));
             //ResetHasChanged();
         }
     }

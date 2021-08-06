@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 
 namespace PictureSet
 {
+    //OpenFileDialog（可能在.NEt Framework中）不支持'/'
     public partial class MainWindow
     {
         private Microsoft.Win32.OpenFileDialog openFileDialog;
@@ -38,7 +39,7 @@ namespace PictureSet
             openFileDialog.FilterIndex = 1;
             if (initialDirectory != null)
             {
-                openFileDialog.InitialDirectory = initialDirectory;
+                openFileDialog.InitialDirectory = initialDirectory.Replace('/', '\\');
             }
             openFileDialog.Multiselect = false;
             openFileDialog.Title = title;
@@ -66,7 +67,7 @@ namespace PictureSet
             openFileDialog.FilterIndex = 1;
             if (initialDirectory != null)
             {
-                openFileDialog.InitialDirectory = initialDirectory;
+                openFileDialog.InitialDirectory = initialDirectory.Replace('/', '\\');
             }
             openFileDialog.Multiselect = true;
             openFileDialog.Title = title;
@@ -83,7 +84,7 @@ namespace PictureSet
             folderBrowserDialog.IsFolderPicker = true;
             if (initialDirectory != null)
             {
-                folderBrowserDialog.InitialDirectory = initialDirectory;
+                folderBrowserDialog.InitialDirectory = initialDirectory.Replace('/', '\\');
             }
             folderBrowserDialog.Multiselect = false;
             folderBrowserDialog.Title = title;

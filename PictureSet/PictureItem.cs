@@ -86,10 +86,10 @@ namespace PictureSet
             get
             {
                 System.Windows.Point point = PictureItemControl.ToPoint(this.Data.Position);
-                if (point != this.Control.PI_Position)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (point != this.Control.PI_Position)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return point;
             }
             set
@@ -109,10 +109,10 @@ namespace PictureSet
             get
             {
                 System.Windows.Point point = PictureItemControl.ToPoint(this.Data.TransformOrigin);
-                if (point != this.Control.PI_TransformOrigin)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (point != this.Control.PI_TransformOrigin)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return point;
             }
             set
@@ -133,10 +133,10 @@ namespace PictureSet
             get
             {
                 System.Windows.Point point = PictureItemControl.ToPoint(this.Data.Scale);
-                if (point != this.Control.PI_Scale)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (point != this.Control.PI_Scale)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return point;
             }
             set
@@ -155,10 +155,10 @@ namespace PictureSet
         {
             get
             {
-                if (this.Data.RotateAngle != this.Control.PI_RotateAngle)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (this.Data.RotateAngle != this.Control.PI_RotateAngle)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return this.Data.RotateAngle;
             }
             set
@@ -177,10 +177,10 @@ namespace PictureSet
         {
             get
             {
-                if (this.Data.Opacity != this.Control.PI_Opacity)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (this.Data.Opacity != this.Control.PI_Opacity)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return this.Data.Opacity;
             }
             set
@@ -199,10 +199,10 @@ namespace PictureSet
         {
             get
             {
-                if (this.Data.ZIndex != this.Control.PI_ZIndex)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (this.Data.ZIndex != this.Control.PI_ZIndex)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return this.Data.ZIndex;
             }
             set
@@ -222,10 +222,10 @@ namespace PictureSet
         {
             get
             {
-                if (this.Data.Path != this.Control.PI_Path)
-                {
-                    throw new InvalidOperationException("Data's value doean't as same as Control's");
-                }
+                //if (this.Data.Path != this.Control.PI_Path)
+                //{
+                //    throw new InvalidOperationException("Data's value doean't as same as Control's");
+                //}
                 return this.Data.Path;
             }
             set

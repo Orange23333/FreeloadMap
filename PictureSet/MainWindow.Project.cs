@@ -86,7 +86,7 @@ namespace PictureSet
             PictureItemStructure[] loadData = new PictureItemStructure[pictureSetProjectFile.PictureItems.Count];
             for (i = 0; i < pictureSetProjectFile.PictureItems.Count; i++)
             {
-                loadData[i] = pictureSetProjectFile.PictureItems[i].ToAbsolutePath(projectDirectory);
+                loadData[i] = pictureSetProjectFile.PictureItems[i].ToAbsolutePath(pictureSetProjectFile.Path);
             }
             return loadData;
         }
@@ -119,21 +119,23 @@ namespace PictureSet
             }
 
 #warning 避免path为null
-            if (this.pictureSetProjectFile.Path == null)
-            {
-                this.pictureSetProjectFile.Path = path;
-            }
+            //if (this.pictureSetProjectFile.Path == null)
+            //{
+            //    this.pictureSetProjectFile.Path = path;
+            //}
+            this.pictureSetProjectFile.Path = path;
+
             pictureSetProjectFile.PictureItems = PictureItemStructuresForSave();
             pictureSetProjectFile.Save(path);
             return true;
         }
         private List<PictureItemStructure> PictureItemStructuresForSave()
         {
-            string projectDirectory = pictureSetProjectFile.Directory; //如果c是目录，位置是a/b/c，返回的是a/b
+            //string projectDirectory = pictureSetProjectFile.Directory; //如果c是目录，位置是a/b/c，返回的是a/b
             List<PictureItemStructure> saveData = new List<PictureItemStructure>();
             foreach (PictureItem pictureItem in this.pictureItems)
             {
-                PictureItemStructure pictureItemStructure = pictureItem.Data.ToRelativePath(projectDirectory);
+                PictureItemStructure pictureItemStructure = pictureItem.Data.ToRelativePath(pictureSetProjectFile.Path);
                 saveData.Add(pictureItemStructure);
             }
             return saveData;
