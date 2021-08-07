@@ -1,0 +1,64 @@
+﻿<div class="alert alert-secondary mt-4" role="alert">
+    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
+    <strong>@Title</strong>
+
+    <div style="@MapSizeStyle">
+        @foreach(PictureItemStructure _pictureItemStructure in pictureSetProjectFile.PictureItems)
+        {
+            <PictureSet_Item PictureItem=@_pictureItemStructure />
+        }
+    </div>
+
+    <a>@FooterComment</a>
+</div>
+
+@code {
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string FooterComment { get; set; }
+
+    [Parameter]
+    public double MapWidth{ get; set; }
+
+    [Parameter]
+    public double MapHeight{ get; set; }
+
+    [Parameter]
+    public string PictureSetProjectSrc{ get; set; }
+
+    public string MapSizeStyle
+    {
+        get
+        {
+            return "width: " + MapWidth.ToString() + "px; height: " + MapHeight.ToString() + "px;";
+        }
+    }
+
+    public PictureSetProjectFile pictureSetProjectFile = null;
+
+    public PictureItemStructure GetPictureItemStructure(int i)
+    {
+        return pictureSetProjectFile.PictureItems[i];
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        int i;
+
+        pictureSetProjectFile = new PictureSetProjectFile();
+        pictureSetProjectFile.Load(System.IO.Path.Combine(Environment.CurrentDirectory, System.IO.Path.Combine("wwwroot", PictureSetProjectSrc).Replace('\\','/')));
+
+        for (i = 0; i < pictureSetProjectFile.PictureItems.Count; i++)
+        {
+            PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
+            string tempPath = PictureItemStructure.GetAbsolutePath(pictureSetProjectFile.Path, pictureItemStructure.Path);
+            tempPath = PictureItemStructure.GetRelativePath(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/"), tempPath);
+            pictureItemStructure.Path = tempPath;
+            pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
+        }
+    }
+}

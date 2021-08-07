@@ -32,6 +32,9 @@ namespace FreeloadMap.Lib.Data
         private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings()
         {
             Formatting = Formatting.Indented,
+            Converters =new List<JsonConverter>() {
+                new JSONConverter_Version()
+            }
         };
 
         //// 只检查是否操作，不与原文件对比是否有变动。

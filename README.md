@@ -25,10 +25,10 @@ The main things in the `FreeloadMap.Lib` are `Picture Set Project` (based on `JS
 # PictureSet
 
 一个简单的制作`Picture Set格式工程`的软件。**也许**之后网站会兼容别的图片集格式。
-*是的，这个东西操作起来真的很反人类。*
+*是的，这个东西操作起来真的很反人类。这只是个临时工具。*
 
 A simple software to make `Picture Set Format Project`. **Maybe** the website will support any other picture set format later.
-*Yes, this garbage software's operation is very anti-human.*
+*Yes, this garbage software's operation is very anti-human. This is only a temporary tool.*
 
 # 引用 Reference
 

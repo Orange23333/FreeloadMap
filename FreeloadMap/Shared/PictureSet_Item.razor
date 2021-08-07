@@ -1,0 +1,73 @@
+﻿<span style="@ImageSpanStyle">
+    <img src="@ImageSrc" alt="@ImageAlt" style="@ImageStyle" />
+</span>
+
+
+@code {
+    [Parameter]
+    public PictureItemStructure PictureItem{ get; set; }
+
+    public string ImageAlt
+    {
+        get
+        {
+            return System.IO.Path.GetFileNameWithoutExtension(PictureItem.Name);
+        }
+    }
+
+    public string ImageSrc
+    {
+        get
+        {
+            return PictureItem.Path;
+        }
+    }
+
+    public string ImageSpanStyle
+    {
+        get{
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
+
+#warning 不清楚中心点是否与scale有关
+            return String.Format(
+                "left:{0}px; " +
+                "top:{1}px; " +
+                "transform-origin: {2}% {3}%; " +
+                "z-index: {4}; " +
+                "position:absolute;",
+                PictureItem.Position.Item1,
+                PictureItem.Position.Item2,
+                PictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
+                PictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
+                PictureItem.ZIndex
+            );
+        }
+    }
+
+    public string ImageStyle
+    {
+        get
+        {
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
+
+#warning 不清楚中心点是否与scale有关
+            return String.Format(
+                "transform-origin: {0}% {1}%; " +
+                //"transform: scale({2}, {3}); " +
+                "width: {2}px; " + //注意：这里貌似用百分比不行
+                "height: {3}px; " + //注意：这里貌似用百分比不行
+                "transform: rotate({4}deg); " +
+                "opacity: {5}; " +
+                "position:absolute;",
+                PictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
+                PictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
+                //PictureItem.Scale.Item1,
+                //PictureItem.Scale.Item2,
+                PictureItem.Scale.Item1 * bitmap.Width,
+                PictureItem.Scale.Item2 * bitmap.Height,
+                PictureItem.RotateAngle,
+                PictureItem.Opacity
+            );
+        }
+    }
+}

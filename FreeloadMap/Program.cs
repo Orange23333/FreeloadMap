@@ -11,8 +11,7 @@ using System.Threading.Tasks;
 
 namespace FreeloadMap
 {
-#error 记得把不必要的资源如img从git中删去
-#error 设定端口
+#warning 设定端口
     public class Program
     {
         public static void Main(string[] args)
