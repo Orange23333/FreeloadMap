@@ -24,6 +24,9 @@ namespace FreeloadMap
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
+                    // https://www.cnblogs.com/wanggang2016/p/12320808.html
+                    webBuilder.UseUrls("https://*:5001"); // dotnetÄ¬ÈÏ¶Ë¿Ú
                 });
     }
 }

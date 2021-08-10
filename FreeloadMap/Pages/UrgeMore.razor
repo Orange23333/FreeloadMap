@@ -1,0 +1,337 @@
+﻿@page "/urgemore"
+@inject IJSRuntime jsRuntime
+@implements IDisposable
+
+<h1>！我 要 催 更！</h1>
+
+<hr />
+
+<ul class="list-group">
+    <li class="list-group-item"><span class="oi oi-list" aria-hidden="true" />随便做的，有点鬼畜。</li>
+    @foreach(KeyValuePair<DateTime, UrgeMoreInfo> showingUrgeMoreInfo in showingUrgeMoreInfos){
+        <li class="list-group-item"><span class="oi oi-info-sign" aria-hidden="true" />@showingUrgeMoreInfo.Value.ToNormalText()</li>
+    }
+    @for(int i = 0; i < @ListLength - @showingUrgeMoreInfos.Count; i++)
+    {
+        <li class="list-group-item"><span class="oi oi-ok-circle" aria-hidden="true" />【防鬼畜特种方块】</li>
+    }
+</ul>
+
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text">意大利炮<span class="oi oi-new-window" aria-hidden="true" />：</span>
+    </div>
+    <input type="text" class="form-control" placeholder="弹药" @bind="input_text"/>
+    <div class="input-group-append">
+        <button class="btn btn-primary" @onclick="SendText"><span class="oi oi-fire oi-red" aria-hidden="true" />开火</button>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ListLength { get; set; } = 8;
+
+    private static int runningPageCount = 0;
+    private System.Threading.Thread showingQueueThread = null;
+    private static System.Threading.Thread taskQueueThread = null;
+    //这里不直接写入缓存文件，太麻烦，用列表缓存。
+    private static List<UrgeMoreInfo> urgeMoreInfoCache = null;
+    private static List<UrgeMoreInfo> urgeMoreInfos = null;
+    private Queue<KeyValuePair<DateTime, UrgeMoreInfo>> showingUrgeMoreInfos = null;
+    private static void TaskQueueThreadMain()
+    {
+        try
+        {
+            while (true)
+            {
+                //处理Cache
+                lock (urgeMoreInfoCache)
+                {
+                    string basePath = Path.Combine(Environment.CurrentDirectory, "wwwroot/data/urgemore/");
+                    foreach (UrgeMoreInfo urgeMoreInfo in urgeMoreInfoCache)
+                    {
+                        string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(urgeMoreInfo);
+
+                        //GetFreeGuid
+                        Guid freeGuid = Guid.Empty;
+                        IEnumerable<Guid> guids = null;
+                        while (true)
+                        {
+                            freeGuid = Guid.NewGuid();
+
+                            lock (urgeMoreInfos)
+                            {
+                                guids = from val in urgeMoreInfos
+                                        select val.ID;
+                                if (!guids.Contains(freeGuid))
+                                {
+                                    break;
+                                }
+                            }
+                        }
+
+                        File.WriteAllText(Path.Combine(basePath, freeGuid.ToString() + ".ugm.json"), jsonText);
+
+                        urgeMoreInfos.Add(urgeMoreInfo);
+                    }
+                    urgeMoreInfoCache.Clear();
+                }
+
+                if (runningPageCount == 0 && urgeMoreInfoCache.Count == 0)
+                {
+                    break;
+                }
+
+                Thread.Sleep(100);
+            }
+
+            lock (taskQueueThread)
+            {
+                taskQueueThread = null;
+            }
+        }
+        catch (ThreadAbortException)
+        {
+            lock (taskQueueThread)
+            {
+                taskQueueThread = null;
+            }
+        }
+        catch (ThreadInterruptedException)
+        {
+            lock (taskQueueThread)
+            {
+                taskQueueThread = null;
+            }
+        }
+    }
+    private static TimeSpan ShowingDelay = new TimeSpan(0, 0, 0, 3, 0);
+    private void ShowingQueueThreadMain()
+    {
+        try
+        {
+            while (true)
+            {
+                lock (showingUrgeMoreInfos)
+                {
+                    if (showingUrgeMoreInfos.Count > 0)
+                    {
+                        if (DateTime.Now.Subtract(showingUrgeMoreInfos.Peek().Key) >= ShowingDelay)
+                        {
+                            showingUrgeMoreInfos.Dequeue();
+                            this.InvokeAsync(() =>
+                            {
+                                StateHasChanged();
+                            });
+                        }
+                    }
+                }
+
+                Thread.Sleep(100);
+            }
+        }
+        catch (ThreadAbortException)
+        {
+            ;
+        }
+        catch (ThreadInterruptedException)
+        {
+            ;
+        }
+    }
+
+    private System.Timers.Timer timer = null;
+    private Random random = null;
+    private int randomDelay = 0;
+
+    private string input_text = "";
+
+    protected override void OnInitialized()
+    {
+        runningPageCount++;
+
+        base.OnInitialized();
+
+        timer = new System.Timers.Timer()
+        {
+            Interval = 100
+        };
+        random = new Random();
+        randomDelay = 1000;
+        showingUrgeMoreInfos = new Queue<KeyValuePair<DateTime, UrgeMoreInfo>>();
+
+        showingQueueThread = new System.Threading.Thread((System.Threading.ThreadStart)ShowingQueueThreadMain)
+        {
+            IsBackground = true
+        };
+
+        InitTaskQueueThread();
+    }
+    private static void InitTaskQueueThread()
+    {
+        if (taskQueueThread == null)
+        {
+            taskQueueThread = new System.Threading.Thread((System.Threading.ThreadStart)TaskQueueThreadMain)
+            {
+                IsBackground = true
+            };
+
+            LoadUrgeMoreInfos();
+
+            if (urgeMoreInfoCache == null)
+            {
+                urgeMoreInfoCache = new List<UrgeMoreInfo>();
+            }
+
+            taskQueueThread.Start();
+        }
+    }
+    private static void LoadUrgeMoreInfos()
+    {
+        DirectoryInfo dataDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "wwwroot/data/urgemore"));
+        FileInfo[] urgeMoreFiles = dataDir.GetFiles("*.ugm.json");
+        urgeMoreInfos = new List<UrgeMoreInfo>();
+
+        foreach (FileInfo urgeMoreFile in urgeMoreFiles)
+        {
+            UrgeMoreInfo urgeMoreInfo = null;
+            string urgeMoreJsonText = File.ReadAllText(urgeMoreFile.FullName);
+            try
+            {
+                urgeMoreInfo = Newtonsoft.Json.JsonConvert.DeserializeObject<UrgeMoreInfo>(urgeMoreJsonText);
+            }
+            catch (Exception ex)
+            {
+                ;
+            }
+            if (urgeMoreInfo != null)
+            {
+                urgeMoreInfos.Add(urgeMoreInfo);
+            }
+        }
+    }
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            timer.Elapsed += ElapsedEventHandler;
+            timer.Start();
+
+            showingQueueThread.Start();
+        }
+    }
+
+    private int timerCount = 0;
+    public void ElapsedEventHandler(object sender, ElapsedEventArgs e){
+        timerCount += (int)timer.Interval;
+        if (timerCount >= randomDelay)
+        {
+            if (showingUrgeMoreInfos.Count() < ListLength && urgeMoreInfos.Count > 0)
+            {
+                List<UrgeMoreInfo> nonshowingUrgeMoreInfos = null;
+                IEnumerable<UrgeMoreInfo> showingUrgeMoreInfosValues = null;
+                lock (showingUrgeMoreInfos)
+                {
+                    showingUrgeMoreInfosValues = from val in showingUrgeMoreInfos
+                                                 select val.Value;
+                }
+                lock (urgeMoreInfos)
+                {
+                    nonshowingUrgeMoreInfos = urgeMoreInfos.Except(showingUrgeMoreInfosValues).ToList();
+                }
+
+                if (nonshowingUrgeMoreInfos.Count > 0)
+                {
+                    int randomIndex = random.Next(0, nonshowingUrgeMoreInfos.Count);
+
+                    Show(nonshowingUrgeMoreInfos[randomIndex]);
+                }
+            }
+
+            randomDelay = random.Next(100, 3000);
+        }
+    }
+    public void Show(UrgeMoreInfo urgeMoreInfo)
+    {
+        InitTaskQueueThread();
+        showingUrgeMoreInfos.Enqueue(new KeyValuePair<DateTime, UrgeMoreInfo>(DateTime.Now, urgeMoreInfo));
+
+        this.InvokeAsync(() =>
+        {
+            StateHasChanged();
+        });
+    }
+    //public class UrgeMoreInfoEqualityComaparer : IEqualityComparer<UrgeMoreInfo>
+    //{
+    //    public bool Equals(UrgeMoreInfo x, UrgeMoreInfo y)
+    //    {
+    //        return Object.ReferenceEquals(x, y);
+    //    }
+    //    public int GetHashCode(UrgeMoreInfo obj)
+    //    {
+    //        return obj.GetHashCode();
+    //    }
+    //}
+
+    private void SendText()
+    {
+        string inputTextTemp = input_text;
+        input_text = "";
+        DateTime now = DateTime.Now;
+
+
+
+        UrgeMoreInfo urgeMoreInfo = new UrgeMoreInfo()
+        {
+            ID = Guid.Empty,
+            DateTime = now,
+            //IP = ,
+            UserAgent = httpContextAccessor.HttpContext.Request.Headers["User-Agent"],
+            Message = inputTextTemp
+        };
+
+        urgeMoreInfoCache.Add(urgeMoreInfo);
+        Show(urgeMoreInfo);
+    }
+
+    #region ==IDispose==
+    // Flag: Has Dispose already been called?
+    bool disposed = false;
+
+    // Public implementation of Dispose pattern callable by consumers.
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    // Protected implementation of Dispose pattern.
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposed)
+            return;
+
+        if (disposing)
+        {
+            // Free any other managed objects here.
+            //
+        }
+
+        runningPageCount--;
+        showingQueueThread?.Interrupt();
+        try
+        {
+            showingQueueThread?.Abort();
+        }
+        catch (PlatformNotSupportedException)
+        {
+            ;
+        }
+
+        disposed = true;
+    }
+    #endregion
+}

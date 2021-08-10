@@ -29,6 +29,9 @@ namespace FreeloadMap
             services.AddRazorPages();
             services.AddServerSideBlazor();
             //services.AddSingleton<WeatherForecastService>();
+
+            // https://www.it1352.com/1971690.html
+            services.AddHttpContextAccessor();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,0 +1,123 @@
+﻿@inject IJSRuntime JS
+@implements IDisposable
+
+<div class=@divClass>
+    @if (latency is null)
+    {
+        <span>计算延迟中...</span>
+    }
+    else
+    {
+        <span>延迟：@(latency.Value.TotalMilliseconds)毫秒。</span>
+    }
+</div>
+
+
+@code {
+    // https://docs.microsoft.com/zh-cn/aspnet/core/blazor/host-and-deploy/server?view=aspnetcore-3.1#measure-network-latency-2
+
+    private DateTime startTime;
+    private TimeSpan? latency;
+
+    private static TimeSpan greatLatency = new TimeSpan(0, 0, 0, 0, 250);
+    private static TimeSpan badLatency = new TimeSpan(0, 0, 0, 0, 1000);
+    public string divClass{
+        get
+        {
+            if (latency == null)
+            {
+                return "alert alert-secondary";
+            }
+            if (latency<=greatLatency)
+            {
+                return "alert alert-success";
+            }
+            else if (latency <= badLatency)
+            {
+                return "alert alert-warning";
+            }
+            else
+            {
+                return "alert alert-danger";
+            }
+        }
+    }
+
+    private Thread meassureLatencyThread=null;
+    public void MeassureLatencyThreadMain()
+    {
+        try
+        {
+            while (true)
+            {
+                startTime = DateTime.UtcNow;
+                var _ = JS.InvokeAsync<string>("toString").Result;
+                latency = DateTime.UtcNow - startTime;
+                this.InvokeAsync(() =>
+                {
+                    StateHasChanged();
+                });
+                Thread.Sleep(1000);
+            }
+        }
+        catch (ThreadAbortException)
+        {
+            ;
+        }
+        catch (ThreadInterruptedException)
+        {
+            ;
+        }
+    }
+    protected override void OnAfterRender(bool firstRender)
+    {
+        base.OnAfterRender(firstRender);
+
+        if (firstRender)
+        {
+            meassureLatencyThread = new Thread((ThreadStart)MeassureLatencyThreadMain)
+            {
+                IsBackground = true
+            };
+
+            meassureLatencyThread.Start();
+        }
+    }
+
+    #region ==IDispose==
+    // Flag: Has Dispose already been called?
+    bool disposed = false;
+
+    // Public implementation of Dispose pattern callable by consumers.
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    // Protected implementation of Dispose pattern.
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposed)
+            return;
+
+        if (disposing)
+        {
+            // Free any other managed objects here.
+            //
+        }
+
+        meassureLatencyThread?.Interrupt();
+        try
+        {
+            meassureLatencyThread?.Abort();
+        }
+        catch (PlatformNotSupportedException)
+        {
+            ;
+        }
+
+        disposed = true;
+    }
+    #endregion
+}

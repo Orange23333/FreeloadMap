@@ -1,11 +1,10 @@
 ﻿<div class="alert alert-secondary mt-4" role="alert">
-    <span class="oi oi-pencil mr-2" aria-hidden="true"></span>
     <strong>@Title</strong>
 
     <div style="@MapSizeStyle">
         @foreach(PictureItemStructure _pictureItemStructure in pictureSetProjectFile.PictureItems)
         {
-            <PictureSet_Item PictureItem=@_pictureItemStructure />
+            <PictureSet_Item PictureItem=@_pictureItemStructure/>
         }
     </div>
 
@@ -27,6 +26,9 @@
 
     [Parameter]
     public string PictureSetProjectSrc{ get; set; }
+
+    [Parameter]
+    public string BasePath{ get; set; }
 
     public string MapSizeStyle
     {
@@ -54,10 +56,15 @@
 
         for (i = 0; i < pictureSetProjectFile.PictureItems.Count; i++)
         {
+#warning 在linux上莫名其妙没用。
+            //PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
+            //string tempPath = PictureItemStructure.GetAbsolutePath(pictureSetProjectFile.Path, pictureItemStructure.Path);
+            //tempPath = PictureItemStructure.GetRelativePath(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/").Replace('\\', '/'), tempPath);
+            //pictureItemStructure.Path = tempPath;
+            //pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
+
             PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
-            string tempPath = PictureItemStructure.GetAbsolutePath(pictureSetProjectFile.Path, pictureItemStructure.Path);
-            tempPath = PictureItemStructure.GetRelativePath(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/"), tempPath);
-            pictureItemStructure.Path = tempPath;
+            pictureItemStructure.Path = System.IO.Path.Combine(BasePath, pictureItemStructure.Path).Replace('\\', '/');
             pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
         }
     }

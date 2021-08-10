@@ -1,16 +1,23 @@
 ﻿@using System.Drawing
 @using System.IO
+@using System.Linq;
 @using System.Net.Http
 @using System.Reflection
+@using System.Threading;
+@using System.Timers;
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Components.Authorization
 @using Microsoft.AspNetCore.Components.Forms
 @using Microsoft.AspNetCore.Components.Routing
 @using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Http
 @using Microsoft.JSInterop
 
 @using Blazor.Extensions.Canvas
 
 @using FreeloadMap
+@using FreeloadMap.Data
 @using FreeloadMap.Lib.Data
 @using FreeloadMap.Shared
+
+@inject IHttpContextAccessor httpContextAccessor

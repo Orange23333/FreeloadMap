@@ -1,0 +1,95 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+
+using MimeMapping;
+
+namespace FreeloadMap.Data
+{
+    [Route("files")]
+    [Controller]
+    public class FileController : Controller
+    {
+        //Regex(trget, "^<wwwroot>/<white path>$");
+        public static List<string> WhiteList = new List<string>()
+        {
+            "data/.*",
+            "data/.*",
+            "data/.*",
+            "favicon.ico"
+        };
+
+#warning 没有限制css和image的扩展名
+
+        // GET: getCss
+        [HttpGet]
+        [ActionName("getCss")]
+        public ActionResult getCss(string src)
+        {
+            Uri _src = new Uri(System.IO.Path.Combine(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot"), src));
+            Uri _parent = new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/css"));
+            string _srcString = _src.ToString();
+
+            if (Regex.IsMatch(_srcString, String.Format("^{0}", _parent.ToString())))
+            {
+                FileStream fileStream = new FileStream(_srcString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return File(fileStream, MimeMapping.MimeUtility.GetMimeMapping(_srcString));
+            }
+            else
+            {
+                Response.StatusCode = 404;
+                return View();
+            }
+        }
+
+        // GET: getImage
+        [HttpGet]
+        [ActionName("getImage")]
+        public ActionResult getImage(string src)
+        {
+            Uri _src = new Uri(System.IO.Path.Combine(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot"), src));
+            Uri _parent = new Uri(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/images"));
+            string _srcString = _src.ToString();
+
+            if (Regex.IsMatch(_srcString, String.Format("^{0}", _parent.ToString())))
+            {
+                FileStream fileStream = new FileStream(_srcString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                return File(fileStream, MimeMapping.MimeUtility.GetMimeMapping(_srcString));
+            }
+            else
+            {
+                Response.StatusCode = 404;
+                return View();
+            }
+        }
+
+        // GET: getFile
+        [HttpGet]
+        [ActionName("getFile")]
+        public ActionResult getFile(string src)
+        {
+            string _srcString = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot"), src));
+            string _parent = System.IO.Path.GetFullPath(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/*"));
+
+            if (Regex.IsMatch(_srcString, String.Format("^{0}$", _parent)))
+            {
+                foreach (string whitePath in WhiteList)
+                {
+                    string _white = System.IO.Path.GetFullPath(System.IO.Path.Combine(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot"), whitePath));
+                    if (Regex.IsMatch(_srcString, String.Format("^{0}$", _white)))
+                    {
+                        FileStream fileStream = new FileStream(_srcString, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                        return File(fileStream, MimeMapping.MimeUtility.GetMimeMapping(_srcString));
+                    }
+                }
+            }
+            Response.StatusCode = 404;
+            return View();
+        }
+    }
+}
