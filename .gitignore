@@ -365,5 +365,6 @@ FodyWeavers.xsd
 
 
 #ADD
+FreeloadMap/wwwroot/data/urgemore/
 FreeloadMap/wwwroot/img/AD_CN/
 FreeloadMap/wwwroot/img/AD_UK/

@@ -5,9 +5,10 @@
 <h1>！我 要 催 更！</h1>
 
 <hr />
+<Latency />
 
 <ul class="list-group">
-    <li class="list-group-item"><span class="oi oi-list" aria-hidden="true" />随便做的，有点鬼畜。</li>
+    <li class="list-group-item"><span class="oi oi-list" aria-hidden="true" />随便做的，有点鬼畜。（请 不 要 刷 屏，谢谢！）</li>
     @foreach(KeyValuePair<DateTime, UrgeMoreInfo> showingUrgeMoreInfo in showingUrgeMoreInfos){
         <li class="list-group-item"><span class="oi oi-info-sign" aria-hidden="true" />@showingUrgeMoreInfo.Value.ToNormalText()</li>
     }
