@@ -56,10 +56,10 @@ namespace PictureSet
             openFileDialog.DereferenceLinks = true;
             // BitmapSource文件类型支持：https://docs.microsoft.com/zh-cn/dotnet/api/system.windows.media.imaging.bitmapsource?view=net-5.0#remarks
             openFileDialog.Filter =
-                "All Supportive Image Files (*.bmp;*.dib;*.gif;*.jpg;*.jpeg;*.jpe;*jfif;*.png;*.tif;*.tiff)|*.bmp;*.dib;*.gif;*.jpg;*.jpeg;*.jpe;*jfif;*.png;*.tif;*.tiff|" +
+                "All Supportive Image Files (*.bmp;*.dib;*.gif;*.jpg;*.jpeg;*.jpe;*.jfif;*.png;*.tif;*.tiff)|*.bmp;*.dib;*.gif;*.jpg;*.jpeg;*.jpe;*.jfif;*.png;*.tif;*.tiff|" +
                 "Bitmap Files (*.bmp;*.dib)|*.bmp;*.dib|" +
                 "Graphics Interchange Format Files (*.gif)|*.gif|" +
-                "Joint Photographics Experts Group Files (*.jpg;*.jpeg;*.jpe;*jfif)|*.jpg;*.jpeg;*.jpe;*jfif|" +
+                "Joint Photographics Experts Group Files (*.jpg;*.jpeg;*.jpe;*.jfif)|*.jpg;*.jpeg;*.jpe;*.jfif|" +
                 "Portable Network Graphics Files (*.png)|*.png|" +
                 "Tagged Image File Format Files (*.tif;*.tiff)|*.tif;*.tiff|" +
                 //"?May Supportive Image files (*.ico;*.wdp;*.webp)|*.ico;*.wdp;*.webp|" +

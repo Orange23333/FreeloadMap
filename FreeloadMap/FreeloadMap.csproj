@@ -1,7 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <Copyright>Copyright © Bisitsoft 2021</Copyright>
+    <Description>Official website: https://www.ourorangenet.com .</Description>
+    <PackageReleaseNotes>Official website: https://www.ourorangenet.com .</PackageReleaseNotes>
+    <Company>Bisitsoft</Company>
+    <Authors>Orange233</Authors>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -9,9 +15,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\images\school\**" />
     <Compile Remove="wwwroot\img\**" />
+    <Content Remove="wwwroot\images\school\**" />
     <Content Remove="wwwroot\img\**" />
+    <EmbeddedResource Remove="wwwroot\images\school\**" />
     <EmbeddedResource Remove="wwwroot\img\**" />
+    <None Remove="wwwroot\images\school\**" />
     <None Remove="wwwroot\img\**" />
   </ItemGroup>
 
@@ -27,6 +37,13 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\data\urgemore\" />
+    <Folder Include="wwwroot\config\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="temp-flm.ourorangenet.com.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

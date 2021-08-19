@@ -51,7 +51,14 @@
             while (true)
             {
                 startTime = DateTime.UtcNow;
-                var _ = JS.InvokeAsync<string>("toString").Result;
+                try
+                {
+                    var _ = JS.InvokeAsync<string>("toString").Result;
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine(ex.ToString());
+                }
                 latency = DateTime.UtcNow - startTime;
                 this.InvokeAsync(() =>
                 {
@@ -112,9 +119,10 @@
         {
             meassureLatencyThread?.Abort();
         }
-        catch (PlatformNotSupportedException)
+        catch (PlatformNotSupportedException ex)
         {
-            ;
+#warning 不知道是否应该记录
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
         disposed = true;

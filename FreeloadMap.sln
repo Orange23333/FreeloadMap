@@ -15,9 +15,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
+		CheckList.txt = CheckList.txt
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp_Test", "ConsoleApp_Test\ConsoleApp_Test.csproj", "{F4C0A21B-27FE-4BA9-A191-42CFBE5030D3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,6 +44,10 @@ Global
 		{B37F4D2D-B3B8-42D7-8573-A8AD2FE98D1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B37F4D2D-B3B8-42D7-8573-A8AD2FE98D1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B37F4D2D-B3B8-42D7-8573-A8AD2FE98D1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4C0A21B-27FE-4BA9-A191-42CFBE5030D3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4C0A21B-27FE-4BA9-A191-42CFBE5030D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4C0A21B-27FE-4BA9-A191-42CFBE5030D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4C0A21B-27FE-4BA9-A191-42CFBE5030D3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

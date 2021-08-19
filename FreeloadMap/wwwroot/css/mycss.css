@@ -1,0 +1,5 @@
+﻿.img-lightup {
+    -webkit-filter: drop-shadow(8px 8px 10px yellow);
+    filter: drop-shadow(0px 0px 10px yellow);
+    margin: 15px;
+}

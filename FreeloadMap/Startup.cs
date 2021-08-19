@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -9,6 +10,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace FreeloadMap
@@ -58,6 +60,20 @@ namespace FreeloadMap
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");
             });
+
+            // https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-5.0#configure-a-proxy-server
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
+            app.UseAuthentication();
+
+            //// https://docs.microsoft.com/zh-cn/aspnet/core/host-and-deploy/linux-apache?view=aspnetcore-5.0#configure-a-proxy-server
+            //// 受信任的代理IP
+            //services.Configure<ForwardedHeadersOptions>(options =>
+            //{
+            //    options.KnownProxies.Add(IPAddress.Parse("10.0.0.100"));
+            //});
         }
     }
 }

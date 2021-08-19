@@ -9,12 +9,15 @@
 
 <ul class="list-group">
     <li class="list-group-item"><span class="oi oi-list" aria-hidden="true" />随便做的，有点鬼畜。（请 不 要 刷 屏，谢谢！）</li>
-    @foreach(KeyValuePair<DateTime, UrgeMoreInfo> showingUrgeMoreInfo in showingUrgeMoreInfos){
-        <li class="list-group-item"><span class="oi oi-info-sign" aria-hidden="true" />@showingUrgeMoreInfo.Value.ToNormalText()</li>
-    }
-    @for(int i = 0; i < @ListLength - @showingUrgeMoreInfos.Count; i++)
+    @lock (showingUrgeMoreInfos)
     {
-        <li class="list-group-item"><span class="oi oi-ok-circle" aria-hidden="true" />【防鬼畜特种方块】</li>
+        @foreach(KeyValuePair<DateTime, UrgeMoreInfo> showingUrgeMoreInfo in showingUrgeMoreInfos){
+            <li class="list-group-item"><span class="oi oi-info-sign" aria-hidden="true" />@showingUrgeMoreInfo.Value.ToNormalText()</li>
+        }
+        @for(int i = 0; i < @ListLength - @showingUrgeMoreInfos.Count; i++)
+        {
+            <li class="list-group-item"><span class="oi oi-ok-circle" aria-hidden="true" />【防鬼畜特种方块】</li>
+        }
     }
 </ul>
 
@@ -27,8 +30,16 @@
         <button class="btn btn-primary" @onclick="SendText"><span class="oi oi-fire oi-red" aria-hidden="true" />开火</button>
     </div>
 </div>
+@if (errorText != null)
+{
+    <div class="alert alert-danger">
+        <span>@errorText</span>
+    </div>
+}
 
 @code {
+    private static readonly bool WorkFinished = false;
+
     [Parameter]
     public int ListLength { get; set; } = 8;
 
@@ -203,7 +214,7 @@
             }
             catch (Exception ex)
             {
-                ;
+                System.Diagnostics.Debug.WriteLine(ex.ToString());
             }
             if (urgeMoreInfo != null)
             {
@@ -277,19 +288,33 @@
     //    }
     //}
 
+    private string errorText = null;
     private void SendText()
     {
         string inputTextTemp = input_text;
         input_text = "";
-        DateTime now = DateTime.Now;
+        DateTime now = DateTime.UtcNow;
 
-
+        if (WorkFinished)
+        {
+            errorText = "都做完了还催更？！";
+            StateHasChanged();
+            return;
+        }
+        if (String.IsNullOrWhiteSpace(inputTextTemp))
+        {
+            errorText = "输入不可以为空。（你看到空弹幕是我加入进去的）";
+            StateHasChanged();
+            return;
+        }
+        errorText = null;
+        //页面刷新将在Show()中完成。
 
         UrgeMoreInfo urgeMoreInfo = new UrgeMoreInfo()
         {
             ID = Guid.Empty,
             DateTime = now,
-            //IP = ,
+            IPEndPoint = String.Format("{0}:{1}",httpContextAccessor.HttpContext.Connection.RemoteIpAddress.ToString(),httpContextAccessor.HttpContext.Connection.RemotePort.ToString()),
             UserAgent = httpContextAccessor.HttpContext.Request.Headers["User-Agent"],
             Message = inputTextTemp
         };
@@ -327,9 +352,9 @@
         {
             showingQueueThread?.Abort();
         }
-        catch (PlatformNotSupportedException)
+        catch (PlatformNotSupportedException ex)
         {
-            ;
+            System.Diagnostics.Debug.WriteLine(ex.ToString());
         }
 
         disposed = true;

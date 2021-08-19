@@ -15,8 +15,8 @@ namespace FreeloadMap.Data
         [JsonProperty(nameof(DateTime))]
         public DateTime DateTime { get; set; }
 
-        [JsonProperty(nameof(IP))]
-        public string IP { get; set; }
+        [JsonProperty(nameof(IPEndPoint))]
+        public string IPEndPoint { get; set; }
 
         [JsonProperty(nameof(UserAgent))]
         public string UserAgent { get; set; }
@@ -26,7 +26,7 @@ namespace FreeloadMap.Data
 
         public string ToNormalText()
         {
-            return String.Format("[{0}]: {1}", this.DateTime.ToString("G"), this.Message);
+            return String.Format("[{0}]: {1}", this.DateTime.ToLocalTime().ToString("\"UTC\"zz yyyy.MM.dd HH:mm:ss"), this.Message);
         }
     }
 }

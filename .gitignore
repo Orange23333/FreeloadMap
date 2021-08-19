@@ -365,6 +365,13 @@ FodyWeavers.xsd
 
 
 #ADD
+CheckList.txt
+ConsoleApp_Test/
+FreeladoMap/temp-flm.ourorangenet.com.pfx
+FreeloadMap/Data/SecretValues.cs
+FreeloadMap/wwwroot/config/SourceConfig.csv
+FreeloadMap/wwwroot/data/students.csv
 FreeloadMap/wwwroot/data/urgemore/
-FreeloadMap/wwwroot/img/AD_CN/
-FreeloadMap/wwwroot/img/AD_UK/
+FreeloadMap/wwwroot/images/AD_CN/
+FreeloadMap/wwwroot/images/AD_UK/
+FreeloadMap/wwwroot/images/SC/

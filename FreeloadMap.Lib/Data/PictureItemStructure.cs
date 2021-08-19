@@ -12,6 +12,7 @@ namespace FreeloadMap.Lib.Data
 #warning 可以直接把这个改成接口，让PIControl继承。不过这样web段就需要一个类来实现这个接口会有点不方便。
     // 暂不支持自定义z序（我不暂时需要），不过这里还是应当保留z序字段。
     // Name(目前自动设置为文件名)|Position|TransformOrigin(目前自动设置为0.0,0.0)|Scale(目前自动设置为1.0,1.0)|RotateAngle(目前自动设置为0)|Opacity(目前自动设置为1.0)|ZIndex|Path|ExValues(目前自动设置为null)
+    [JsonObject(MemberSerialization.OptIn)]
     public struct PictureItemStructure
     {
         [JsonProperty(nameof(Name))]
