@@ -1,7 +1,11 @@
 ﻿@page "/"
 
+<!--
 <h1>蹭饭地图</h1>
 <a>蹭饭即正义。</a>
+-->
+<h1>@(programConfigFile.Configs[KnownProgramConfigKeys.TotalTitle])</h1>
+<a>@(programConfigFile.Configs[KnownProgramConfigKeys.SecondaryTitle])</a>
 
 <hr />
 <Latency />
@@ -34,9 +38,10 @@
     </div>
 }
 
-<PictureSet_Map Title="中国" FooterComment="本地图精度较低，不代表实际地形与地区划分。" MapWidth="800" MapHeight="640" ViewMode=@ViewMode PictureSetProjectSrc="images/AD_CN/CN_map.psp" StudentInfosSrc="data/si.json" BasePath="images/AD_CN" />
-
-<PictureSet_Map Title="英国·苏格兰" FooterComment="本地图精度较低，不代表地形与实际地区划分。" MapWidth="256" MapHeight="256" ViewMode=@ViewMode PictureSetProjectSrc="images/AD_UK/Scotland_map.psp" StudentInfosSrc="data/si.json" BasePath="images/AD_UK" />
+@foreach(MapConfigItem mapConfigItem in mapConfigFile.MapConfigItems)
+{
+    <PictureSet_Map Title="@(mapConfigItem.Title)" FooterComment="@(mapConfigItem.FooterComment)" MapWidth=@(double.Parse(mapConfigItem.Width)) MapHeight=@(double.Parse(mapConfigItem.Height)) ViewMode=@ViewMode />
+}
 
 @code{
     #warning 加个密码
@@ -55,6 +60,32 @@
                 StateHasChanged();
             }
         }
+    }
+
+    [Parameter]
+    public string ProgramConfigSrc { get; set; } = "wwwroot/config/ProgramConfig.csv";
+    private ProgramConfigFile programConfigFile = null;
+
+    [Parameter]
+    public string SourceConfigSrc { get; set; } = "wwwroot/config/SourceConfig.csv";
+    private SourceConfigFile sourceConfigFile = null;
+
+    [Parameter]
+    public string MapConfigSrc { get; set; } = "wwwroot/config/MapConfig.csv";
+    private MapConfigFile mapConfigFile = null;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        programConfigFile=new ProgramConfigFile();
+        programConfigFile.Load(ProgramConfigSrc);
+
+        sourceConfigFile=new SourceConfigFile();
+        sourceConfigFile.Load(SourceConfigSrc);
+
+        mapConfigFile=new MapConfigFile();
+        mapConfigFile.Load(MapConfigSrc);
     }
 
     private string InBoxButtonClass

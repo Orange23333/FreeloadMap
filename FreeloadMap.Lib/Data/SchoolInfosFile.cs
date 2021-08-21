@@ -33,15 +33,18 @@ namespace FreeloadMap.Lib.Data
         {
             int i;
             SchoolInfo[] newSchoolInfos = new SchoolInfo[schoolInfos.Count];
-            for (i = 0; i < schoolInfos.Count; i++)
+            lock (schoolInfos)
             {
-                newSchoolInfos[i] = schoolInfos[i].GetCopy();
+                for (i = 0; i < schoolInfos.Count; i++)
+                {
+                    newSchoolInfos[i] = schoolInfos[i].GetCopy();
+                }
             }
 
             //为了快速解锁schoolInfos，这里分开拷贝和补全部分。
             DirectoryInfo directoryInfo = new DirectoryInfo(System.IO.Path.GetDirectoryName(this.Path).Replace('\\', '/'));
             FileInfo[] fileInfos = directoryInfo.GetFiles();
-            for (i = 0; i < schoolInfos.Count; i++)
+            for (i = 0; i < newSchoolInfos.Length; i++)
             {
                 if (String.IsNullOrEmpty(newSchoolInfos[i].IconPath))
                 {
@@ -91,7 +94,6 @@ namespace FreeloadMap.Lib.Data
             {
                 this.SchoolInfos = csv.GetRecords<SchoolInfo>().ToList();
             }
-
 
             this.path = path;
         }

@@ -1,0 +1,148 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using CsvHelper;
+using CsvHelper.Configuration;
+using Newtonsoft.Json;
+
+using FreeloadMap.Data.SourceTypes;
+using FreeloadMap.Lib.Data;
+
+namespace FreeloadMap.Data
+{
+    [JsonObject(MemberSerialization.OptIn)]
+    public class SourceConfigFile
+    {
+        private string path = null;
+        public string Path { get { return path; } set { path = value; } }
+
+        private List<SourceConfigItem> sourceConfigItems = new List<SourceConfigItem>();
+        [JsonProperty(nameof(SourceConfigItems))]
+        public List<SourceConfigItem> SourceConfigItems { get { return sourceConfigItems; } set { sourceConfigItems = value; } }
+
+        private BigInfos bigInfos = null;
+        [JsonProperty(nameof(BigInfos))]
+        public BigInfos BigInfos { get { return bigInfos; } }
+        private PictureItemStructure[] pictureItemStructures = null;
+        [JsonProperty(nameof(PictureItemStructures))]
+        public PictureItemStructure[] PictureItemStructures { get { return pictureItemStructures; } }
+
+        private static readonly CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
+        {
+            AllowComments = true,
+            Encoding = Encoding.UTF8,
+            PrepareHeaderForMatch = args => args.Header.ToLower()
+        };
+
+        public void Load(string path)
+        {
+            using (var reader = new StreamReader(path))
+            using (var csv = new CsvReader(reader, csvConfiguration))
+            {
+                this.SourceConfigItems = csv.GetRecords<SourceConfigItem>().ToList();
+            }
+
+            this.path = path;
+
+            Make();
+        }
+        private void Make()
+        {
+            bool _AutoComplete_LocationPictureBinding_flag = false;
+            List<PictureItemStructure> pictureItemStructures = new List<PictureItemStructure>();
+            List<LocationPictureBinding> locationPictureBindings = new List<LocationPictureBinding>();
+            List<LevelLocation> levelLocations = new List<LevelLocation>();
+            List<SchoolInfo> schoolInfos = new List<SchoolInfo>();
+            List<StudentInfo> studentInfos = new List<StudentInfo>();
+
+            foreach(SourceConfigItem sourceConfigItem in SourceConfigItems)
+            {
+#warning 规范化特殊字段处理器
+                if (sourceConfigItem.SourceType == KnownSourceType._AutoComplete_LocationPictureBinding)
+                {
+                    _AutoComplete_LocationPictureBinding_flag = true;
+                    continue;
+                }
+
+                ISourceTypeResolver sourceTypeResolver = SourceTypeResolverManager.SourceTypeResolvers[sourceConfigItem.SourceType];
+
+                string absolutePath = GetAbsolutePath(sourceConfigItem.Path);
+                object sourceTypeResolverReturn = sourceTypeResolver.Resolve(absolutePath);
+
+                if (sourceTypeResolver.ReturnType == typeof(PictureItemStructure[]))
+                {
+                    pictureItemStructures.AddRange((PictureItemStructure[])sourceTypeResolverReturn);
+                }
+                else if (sourceTypeResolver.ReturnType == typeof(LocationPictureBinding[]))
+                {
+                    locationPictureBindings.AddRange((LocationPictureBinding[])sourceTypeResolverReturn);
+                }
+                else if(sourceTypeResolver.ReturnType == typeof(LevelLocation[]))
+                {
+                    levelLocations.AddRange((LevelLocation[])sourceTypeResolverReturn);
+                }
+                else if (sourceTypeResolver.ReturnType == typeof(SchoolInfo[]))
+                {
+                    schoolInfos.AddRange((SchoolInfo[])sourceTypeResolverReturn);
+                }
+                else if (sourceTypeResolver.ReturnType == typeof(StudentInfo[]))
+                {
+                    studentInfos.AddRange((StudentInfo[])sourceTypeResolverReturn);
+                }
+                else
+                {
+                    throw new ArgumentException("Non-support type.", "ReturnType");
+                }
+            }
+
+            PictureItemStructure[] pictureItemStructuresArray = pictureItemStructures.ToArray();
+            if (_AutoComplete_LocationPictureBinding_flag)
+            {
+                locationPictureBindings.AddRange(AutoComplete_LocationPictureBinding(pictureItemStructuresArray));
+            }
+
+#warning 这里还可以加上别的处理器（如筛选器（因此，Make要带参数，每个SourceInto可以有一串属性值））
+
+            this.pictureItemStructures = pictureItemStructuresArray;
+            this.bigInfos = BigInfos.MakeMinimumSet(
+                locationPictureBindings.ToArray(),
+                levelLocations.ToArray(),
+                schoolInfos.ToArray(),
+                studentInfos.ToArray());
+        }
+        private string GetAbsolutePath(string relativePath)
+        {
+            return new Uri(new Uri(this.Path, UriKind.Absolute), new Uri(relativePath, UriKind.Relative)).ToString();
+        }
+        public static IEnumerable<LocationPictureBinding> AutoComplete_LocationPictureBinding(PictureItemStructure[] pictureItems)
+        {
+            foreach(PictureItemStructure pictureItem in pictureItems)
+            {
+                yield return new LocationPictureBinding()
+                {
+                    Location = LevelLocation.Parse(pictureItem.Name),
+                    PictureName = pictureItem.Name
+                };
+            }
+        }
+
+        /// <remarks>
+        /// 不检查文件存在。
+        /// </remarks>
+        public void Save(string path)
+        {
+            using (var writer = new StreamWriter(path))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(SourceConfigItems);
+            }
+
+            this.path = path;
+        }
+    }
+}

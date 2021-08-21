@@ -10,17 +10,24 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Newtonsoft.Json;
 
+using FreeloadMap.Data.SourceTypes;
+using FreeloadMap.Lib.Data;
+
 namespace FreeloadMap.Data
 {
     [JsonObject(MemberSerialization.OptIn)]
-    public class SourceConfig
+    public class ProgramConfigFile
     {
         private string path = null;
         public string Path { get { return path; } set { path = value; } }
 
-        private List<SourceConfigItem> sourceConfigItems = new List<SourceConfigItem>();
-        [JsonProperty(nameof(SourceConfigItems))]
-        public List<SourceConfigItem> SourceConfigItems { get { return sourceConfigItems; } set { sourceConfigItems = value; } }
+        //private List<ProgramConfigItem> programConfigItems = new List<ProgramConfigItem>();
+        //[JsonProperty(nameof(ProgramConfigItems))]
+        //public List<ProgramConfigItem> ProgramConfigItems { get { return programConfigItems; } set { programConfigItems = value; } }
+
+        private Dictionary<string, string> configs = new Dictionary<string, string>();
+        [JsonProperty(nameof(Configs))]
+        public Dictionary<string, string> Configs { get { return configs; } set { configs = value; } }
 
         private static readonly CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
@@ -34,7 +41,7 @@ namespace FreeloadMap.Data
             using (var reader = new StreamReader(path))
             using (var csv = new CsvReader(reader, csvConfiguration))
             {
-                this.SourceConfigItems = csv.GetRecords<SourceConfigItem>().ToList();
+                this.Configs = ProgramConfigItem.ToDictionary(csv.GetRecords<ProgramConfigItem>());
             }
 
             this.path = path;
@@ -48,7 +55,7 @@ namespace FreeloadMap.Data
             using (var writer = new StreamWriter(path))
             using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
             {
-                csv.WriteRecords(SourceConfigItems);
+                csv.WriteRecords(ProgramConfigItem.ToArray(this.Configs));
             }
 
             this.path = path;

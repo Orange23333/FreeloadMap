@@ -12,6 +12,9 @@ using CsvHelper.Configuration;
 namespace FreeloadMap.Lib.Data
 {
     // 只考虑地球
+    /// <remarks>
+    /// 建议使用LevelLocation.AnyLocation.GetCopy()来获取一个初始化的LevelLocation。
+    /// </remarks>
     [JsonObject(MemberSerialization.OptIn)]
     public class LevelLocation : IComparable<LevelLocation>
     {
@@ -326,6 +329,11 @@ namespace FreeloadMap.Lib.Data
                     yield return _src; 
                 }
             }
+        }
+
+        public LevelLocation GetCopy()
+        {
+            return (LevelLocation)this.MemberwiseClone();
         }
     }
 }

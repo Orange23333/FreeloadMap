@@ -29,6 +29,31 @@ namespace FreeloadMap.Lib.Data
             PrepareHeaderForMatch = args => args.Header.ToLower()
         };
 
+        public LocationPictureBinding[] CompletePicturePath()
+        {
+            int i;
+            LocationPictureBinding[] newLocationPictureBindings = new LocationPictureBinding[locationPictureBindings.Count];
+            lock (newLocationPictureBindings)
+            {
+                for (i = 0; i < locationPictureBindings.Count; i++)
+                {
+                    newLocationPictureBindings[i] = locationPictureBindings[i].GetCopy();
+                }
+            }
+
+            //为了快速解锁schoolInfos，这里分开拷贝和补全部分。
+
+            for (i = 0; i < newLocationPictureBindings.Length; i++)
+            {
+                if (String.IsNullOrEmpty(newLocationPictureBindings[i].PictureName))
+                {
+                    newLocationPictureBindings[i].PictureName = newLocationPictureBindings[i].Location.ToShortString();
+                }
+            }
+
+            return newLocationPictureBindings;
+        }
+
         public void Load(string path)
         {
             using (var reader = new StreamReader(path))

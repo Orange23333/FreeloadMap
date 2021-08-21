@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace FreeloadMap.Data.SourceTypes
+{
+#warning 请逐个替换所有的REPLACE。
+    public class STR_Template : ISourceTypeResolver
+    {
+        public string Name { get { return "REPLACE"; } }
+
+        public Type ReturnType { get { return typeof(REPLACE); } }
+
+        public object Resolve(string path)
+        {
+            REPLACE;
+        }
+    }
+}

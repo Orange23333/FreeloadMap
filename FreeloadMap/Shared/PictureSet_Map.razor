@@ -27,17 +27,12 @@
     [Parameter]
     public MapViewMode ViewMode{ get; set; }
 
-    #error HERE
-    //[Parameter]
-    //public string PictureSetProjectSrc{ get; set; }
-    [Parameter]
-    public LevelLocation LocationFilter { get; set; } = null;
     [Parameter]
     public BigInfos BigInfoSet { get; set; }
 
     [Parameter]
-    public string StudentInfosSrc{ get; set; }
-
+    public LevelLocation LocationFilter { get; set; } = LevelLocation.AnyLocation;
+    
     [Parameter]
     public string BasePath{ get; set; }
 

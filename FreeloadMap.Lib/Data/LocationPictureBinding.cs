@@ -36,5 +36,10 @@ namespace FreeloadMap.Lib.Data
                                                     select val;
             return r;
         }
+
+        public LocationPictureBinding GetCopy()
+        {
+            return (LocationPictureBinding)this.MemberwiseClone();
+        }
     }
 }
