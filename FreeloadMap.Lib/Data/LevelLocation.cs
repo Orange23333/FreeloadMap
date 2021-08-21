@@ -176,25 +176,25 @@ namespace FreeloadMap.Lib.Data
                 {
                     return true;
                 }
-                else if (this.Province == levelLocation.Country)
+                else if (this.Province == levelLocation.Province)
                 {
                     if (this.City == LevelLocation.Default)
                     {
                         return true;
                     }
-                    else if (this.City == levelLocation.Country)
+                    else if (this.City == levelLocation.City)
                     {
                         if (this.District == LevelLocation.Default)
                         {
                             return true;
                         }
-                        else if (this.District == levelLocation.Country)
+                        else if (this.District == levelLocation.District)
                         {
                             if (this.DetailAddress == LevelLocation.Default)
                             {
                                 return true;
                             }
-                            else if (this.DetailAddress == levelLocation.Country)
+                            else if (this.DetailAddress == levelLocation.DetailAddress)
                             {
                                 return true;
                             }

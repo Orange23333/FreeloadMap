@@ -40,7 +40,7 @@
 
 @foreach(MapConfigItem mapConfigItem in mapConfigFile.MapConfigItems)
 {
-    <PictureSet_Map Title="@(mapConfigItem.Title)" FooterComment="@(mapConfigItem.FooterComment)" MapWidth=@(double.Parse(mapConfigItem.Width)) MapHeight=@(double.Parse(mapConfigItem.Height)) ViewMode=@ViewMode />
+    <PictureSet_Map Title="@(mapConfigItem.Title)" FooterComment="@(mapConfigItem.FooterComment)" MapWidth=@(double.Parse(mapConfigItem.Width)) MapHeight=@(double.Parse(mapConfigItem.Height)) ViewMode=@ViewMode PictureItemDictionaty=@(sourceConfigFile.PictureItemStructureDictionary) BigInfoSet=@(sourceConfigFile.BigInfos) LocationFilter=@(mapConfigItem.LocationFilter) />
 }
 
 @code{

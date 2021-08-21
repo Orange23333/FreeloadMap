@@ -55,9 +55,19 @@ namespace FreeloadMap.Lib.Data
             //                      select val;
             var includedLocations = locations;
 
-            var includedSchools = from val in schools
-                                  where includedLocations.Contains(val.Location)
-                                  select val;
+
+            List<SchoolInfo> includedSchools = new List<SchoolInfo>();
+            foreach (SchoolInfo school in schools)
+            {
+                foreach(LevelLocation includedLocation in includedLocations)
+                {
+                    if (includedLocation.IsEqualsOrInclude(school.Location))
+                    {
+                        includedSchools.Add(school);
+                        break;
+                    }
+                }
+            }
             foreach (var includedLocation in includedLocations)
             {
                 bigInfos.LocationToSchoolDictionary.Add(includedLocation, new List<SchoolInfo>());

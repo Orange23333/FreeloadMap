@@ -28,9 +28,9 @@ namespace FreeloadMap.Data
         private BigInfos bigInfos = null;
         [JsonProperty(nameof(BigInfos))]
         public BigInfos BigInfos { get { return bigInfos; } }
-        private PictureItemStructure[] pictureItemStructures = null;
-        [JsonProperty(nameof(PictureItemStructures))]
-        public PictureItemStructure[] PictureItemStructures { get { return pictureItemStructures; } }
+        private Dictionary<string, PictureItemStructure> pictureItemStructureDictionary = null;
+        [JsonProperty(nameof(PictureItemStructureDictionary))]
+        public Dictionary<string, PictureItemStructure> PictureItemStructureDictionary { get { return pictureItemStructureDictionary; } }
 
         private static readonly CsvConfiguration csvConfiguration = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
@@ -53,7 +53,8 @@ namespace FreeloadMap.Data
         }
         private void Make()
         {
-            bool _AutoComplete_LocationPictureBinding_flag = false;
+            bool _AutoComplete_LocationPictureBindings_flag = false;
+            bool _AutoComplete_LocationByLocationPictureBindings_flag = false;
             List<PictureItemStructure> pictureItemStructures = new List<PictureItemStructure>();
             List<LocationPictureBinding> locationPictureBindings = new List<LocationPictureBinding>();
             List<LevelLocation> levelLocations = new List<LevelLocation>();
@@ -63,9 +64,14 @@ namespace FreeloadMap.Data
             foreach(SourceConfigItem sourceConfigItem in SourceConfigItems)
             {
 #warning 规范化特殊字段处理器
-                if (sourceConfigItem.SourceType == KnownSourceType._AutoComplete_LocationPictureBinding)
+                if (sourceConfigItem.SourceType == KnownSourceType._AutoComplete_LocationPictureBindings)
                 {
-                    _AutoComplete_LocationPictureBinding_flag = true;
+                    _AutoComplete_LocationPictureBindings_flag = true;
+                    continue;
+                }
+                else if(sourceConfigItem.SourceType == KnownSourceType._AutoComplete_LocationByLocationPictureBindings)
+                {
+                    _AutoComplete_LocationByLocationPictureBindings_flag = true;
                     continue;
                 }
 
@@ -101,14 +107,20 @@ namespace FreeloadMap.Data
             }
 
             PictureItemStructure[] pictureItemStructuresArray = pictureItemStructures.ToArray();
-            if (_AutoComplete_LocationPictureBinding_flag)
+            if (_AutoComplete_LocationPictureBindings_flag)
             {
                 locationPictureBindings.AddRange(AutoComplete_LocationPictureBinding(pictureItemStructuresArray));
+            }
+            if (_AutoComplete_LocationByLocationPictureBindings_flag)
+            {
+                var locationsFromLPBs = from val in locationPictureBindings
+                                        select val.Location;
+                levelLocations.AddRange(locationsFromLPBs);
             }
 
 #warning 这里还可以加上别的处理器（如筛选器（因此，Make要带参数，每个SourceInto可以有一串属性值））
 
-            this.pictureItemStructures = pictureItemStructuresArray;
+            this.pictureItemStructureDictionary = PictureItemStructure.ToDictionaryByName(pictureItemStructuresArray);
             this.bigInfos = BigInfos.MakeMinimumSet(
                 locationPictureBindings.ToArray(),
                 levelLocations.ToArray(),
@@ -117,7 +129,7 @@ namespace FreeloadMap.Data
         }
         private string GetAbsolutePath(string relativePath)
         {
-            return new Uri(new Uri(this.Path, UriKind.Absolute), new Uri(relativePath, UriKind.Relative)).ToString();
+            return new Uri(new Uri(System.IO.Path.GetFullPath(this.Path).Replace('\\', '/'), UriKind.Absolute), new Uri(relativePath, UriKind.Relative)).LocalPath;
         }
         public static IEnumerable<LocationPictureBinding> AutoComplete_LocationPictureBinding(PictureItemStructure[] pictureItems)
         {

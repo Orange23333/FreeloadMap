@@ -2,9 +2,9 @@
     <strong>@Title</strong>
 
     <div style="@MapSizeStyle">
-        @foreach(PictureItemStructure _pictureItemStructure in pictureSetProjectFile.PictureItems)
+        @foreach(var locationPictureBindingToPictureName in filteredBigInfoSet.LocationPictureBindingDictionary)
         {
-            <PictureSet_Item PictureItem=@_pictureItemStructure ViewMode=@ViewMode />
+            <PictureSet_Item PictureItem=@(PictureItemDictionaty[locationPictureBindingToPictureName.Value]) ViewMode=@ViewMode />
         }
     </div>
 
@@ -28,14 +28,15 @@
     public MapViewMode ViewMode{ get; set; }
 
     [Parameter]
+    public Dictionary<string, PictureItemStructure> PictureItemDictionaty { get; set; }
+
+    [Parameter]
     public BigInfos BigInfoSet { get; set; }
+    private BigInfos filteredBigInfoSet = null;
 
     [Parameter]
     public LevelLocation LocationFilter { get; set; } = LevelLocation.AnyLocation;
     
-    [Parameter]
-    public string BasePath{ get; set; }
-
     public string MapSizeStyle
     {
         get
@@ -55,23 +56,23 @@
     {
         base.OnInitialized();
 
-        int i;
+        filteredBigInfoSet = BigInfoSet.FilterByLocation(LocationFilter);
 
-        pictureSetProjectFile = new PictureSetProjectFile();
-        pictureSetProjectFile.Load(System.IO.Path.Combine(Environment.CurrentDirectory, System.IO.Path.Combine("wwwroot", PictureSetProjectSrc).Replace('\\','/')));
-
-        for (i = 0; i < pictureSetProjectFile.PictureItems.Count; i++)
-        {
-#warning 在linux上莫名其妙没用。
-            //PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
-            //string tempPath = PictureItemStructure.GetAbsolutePath(pictureSetProjectFile.Path, pictureItemStructure.Path);
-            //tempPath = PictureItemStructure.GetRelativePath(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/").Replace('\\', '/'), tempPath);
-            //pictureItemStructure.Path = tempPath;
-            //pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
-
-            PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
-            pictureItemStructure.Path = System.IO.Path.Combine(BasePath, pictureItemStructure.Path).Replace('\\', '/');
-            pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
-        }
+        //pictureSetProjectFile = new PictureSetProjectFile();
+        //pictureSetProjectFile.Load(System.IO.Path.Combine(Environment.CurrentDirectory, System.IO.Path.Combine("wwwroot", PictureSetProjectSrc).Replace('\\','/')));
+        //
+        //for (i = 0; i < pictureSetProjectFile.PictureItems.Count; i++)
+        //{
+        //    #warning 在linux上莫名其妙没用。
+        //    //PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
+        //    //string tempPath = PictureItemStructure.GetAbsolutePath(pictureSetProjectFile.Path, pictureItemStructure.Path);
+        //    //tempPath = PictureItemStructure.GetRelativePath(System.IO.Path.Combine(Environment.CurrentDirectory, "wwwroot/").Replace('\\', '/'), tempPath);
+        //    //pictureItemStructure.Path = tempPath;
+        //    //pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
+        //
+        //    PictureItemStructure pictureItemStructure = pictureSetProjectFile.PictureItems[i];
+        //    pictureItemStructure.Path = System.IO.Path.Combine(BasePath, pictureItemStructure.Path).Replace('\\', '/');
+        //    pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
+        //}
     }
 }

@@ -12,7 +12,10 @@ namespace FreeloadMap.Data.SourceTypes
         public static readonly string PictureSetProjectFile = "PictureSetProjectFile";
 
         // _AutoComplete_LocationPictureBinding的效用暂时与其位置无关，只要存在，在读取所有内容后从PictureSetProject中补全，这要求其中所以的PictureSet项的名字符合LevelLocation表意。
-        public static readonly string _AutoComplete_LocationPictureBinding = "_AutoComplete_LocationPictureBinding";
+        public static readonly string _AutoComplete_LocationPictureBindings = "_AutoComplete_LocationPictureBindings";
+
+        // _AutoComplete_LocationByLocationPictureBindings的效用暂时与其位置无关，只要存在，在读取所有内容后从LocationPictureBindings中补全。它会在_AutoComplete_LocationPictureBindings之后执行。
+        public static readonly string _AutoComplete_LocationByLocationPictureBindings = "_AutoComplete_LocationByLocationPictureBindings";
 
         public static readonly string LocationPictureBindingsFile = "LocationPictureBindingsFile";
 

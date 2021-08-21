@@ -18,7 +18,7 @@ namespace FreeloadMap.Data.SourceTypes
             StudentInfosFile studentInfosFile = new StudentInfosFile();
             studentInfosFile.Load(path);
 
-            return studentInfosFile.StudentInfos;
+            return studentInfosFile.StudentInfos.ToArray();
         }
     }
 }
