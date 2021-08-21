@@ -1,0 +1,25 @@
+{
+  "ProjectVersion": "1.0",
+  "PictureItems": [
+    {
+      "Name": "UK_À’∏Ò¿º",
+      "Position": {
+        "Item1": 500.0,
+        "Item2": 50.0
+      },
+      "TransformOrigin": {
+        "Item1": 0.0,
+        "Item2": 0.0
+      },
+      "Scale": {
+        "Item1": 1.0,
+        "Item2": 1.0
+      },
+      "RotateAngle": 0.0,
+      "Opacity": 1.0,
+      "ZIndex": 0,
+      "Path": "UK_0001_Scotland.png",
+      "ExValues": null
+    }
+  ]
+}

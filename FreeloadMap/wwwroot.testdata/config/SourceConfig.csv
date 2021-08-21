@@ -1,0 +1,7 @@
+sourcetype,path
+PictureSetProjectFile,../images/AD_CN/CN_map.psp
+PictureSetProjectFile,../images/AD_UK/Scotland_map.psp
+_AutoComplete_LocationPictureBindings,
+_AutoComplete_LocationByLocationPictureBindings,
+SchoolInfosFile,../images/SC/schools.csv
+StudentInfosFile,../data/students.csv
