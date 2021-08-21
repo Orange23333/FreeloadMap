@@ -88,7 +88,8 @@ namespace FreeloadMap.Lib.Data
             var includedStudents = from val in students
                                    where includedSchoolNames.Contains(val.SchoolName)
                                    select val;
-            includedSchoolNames = null;
+#warning Compile Bug
+            //includedSchoolNames = null;
             foreach (var includedStudent in includedStudents)
             {
                 SchoolInfo sameSchool;
@@ -108,6 +109,7 @@ namespace FreeloadMap.Lib.Data
         public BigInfos FilterByLocation(LevelLocation filter)
         {
             var locationPictureBinding = from val in this.locationPictureBindingDictionary
+                                         where filter.IsEqualsOrInclude(val.Key)
                                          select new LocationPictureBinding()
                                          {
                                              Location = val.Key,
