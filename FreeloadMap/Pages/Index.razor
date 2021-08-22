@@ -40,14 +40,14 @@
 
 @foreach(MapConfigItem mapConfigItem in mapConfigFile.MapConfigItems)
 {
-    <PictureSet_Map Title="@(mapConfigItem.Title)" FooterComment="@(mapConfigItem.FooterComment)" MapWidth=@(double.Parse(mapConfigItem.Width)) MapHeight=@(double.Parse(mapConfigItem.Height)) ViewMode=@ViewMode PictureItemDictionaty=@(sourceConfigFile.PictureItemStructureDictionary) BigInfoSet=@(sourceConfigFile.BigInfos) LocationFilter=@(mapConfigItem.LocationFilter) />
+    <PictureSet_Map Title="@(mapConfigItem.Title)" FooterComment="@(mapConfigItem.FooterComment)" MapWidth=@(double.Parse(mapConfigItem.Width)) MapHeight=@(double.Parse(mapConfigItem.Height)) ViewMode=@ViewMode PictureItemDictionary=@(sourceConfigFile.PictureItemStructureDictionary) BigInfoSet=@(sourceConfigFile.BigInfos) LocationFilter=@(mapConfigItem.LocationFilter) />
 }
 
 @code{
     #warning 加个密码
 	#warning 这里应当可以通过配置来选择显示国家。
 
-    private MapViewMode viewMode = MapViewMode.Direct;
+    private MapViewMode viewMode = MapViewMode.InBox;
     [Parameter]
     public MapViewMode ViewMode
     {
@@ -101,11 +101,11 @@
     private void InBoxButton_Click()
     {
 #if DEBUG
-        ViewMode = MapViewMode.InBox;
+        ;
 #else
-        showGGG = true;
-        StateHasChanged();
+        showGGG = false;
 #endif
+        ViewMode = MapViewMode.InBox;
     }
 
     private string DirectButtonClass
@@ -118,12 +118,12 @@
     }
 
     private void DirectButton_Click()
-    {
+    {        
 #if DEBUG
-        ;
-#else
-        showGGG = false;
-#endif
         ViewMode = MapViewMode.Direct;
+#else
+        showGGG = true;
+        StateHasChanged();
+#endif
     }
 }

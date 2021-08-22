@@ -1,10 +1,22 @@
-﻿<div class="alert alert-secondary mt-4" role="alert">
+﻿<div class="alert alert-secondary mt-4" role="alert" @onclick="OnClick" @ontouchstart="OnClick">
     <strong>@Title</strong>
 
     <div style="@MapSizeStyle">
         @foreach(var locationPictureBindingToPictureName in filteredBigInfoSet.LocationPictureBindingDictionary)
         {
-            <PictureSet_Item PictureItem=@(PictureItemDictionaty[locationPictureBindingToPictureName.Value]) ViewMode=@ViewMode />
+            <PictureSet_Item PictureItem=@(PictureItemDictionary[locationPictureBindingToPictureName.Value]) ViewMode=@ViewMode ThisLocation=@(locationPictureBindingToPictureName.Key) OnPointerMapItemChanged="@OnPointerMapItemChangedHandler" OnClickMapItem="@OnClickMapItemHandler" ForceShadow=@(locationPictureBindingToPictureName.Key==ClickLocationFilter) PepoleAmount=@(filteredBigInfoSet.FindInLocationToSchoolsDictionary(locationPictureBindingToPictureName.Key).Count) />
+        }
+
+        @if (ViewMode == MapViewMode.Direct)
+        {
+            
+        }
+        else if(ViewMode == MapViewMode.InBox)
+        {
+            @if (clickLocationFilter != null)
+            {
+                <InBox_Schools LeftToParent="@MapWidth" SchoolToStudentsDictionary=@click_SchoolToStudentsDictioanry OnClickClose=@((object arg)=>{ClickLocationFilter = null;}) />
+            }
         }
     </div>
 
@@ -28,7 +40,7 @@
     public MapViewMode ViewMode{ get; set; }
 
     [Parameter]
-    public Dictionary<string, PictureItemStructure> PictureItemDictionaty { get; set; }
+    public Dictionary<string, PictureItemStructure> PictureItemDictionary { get; set; }
 
     [Parameter]
     public BigInfos BigInfoSet { get; set; }
@@ -36,6 +48,25 @@
 
     [Parameter]
     public LevelLocation LocationFilter { get; set; } = LevelLocation.AnyLocation;
+
+    private LevelLocation clickLocationFilter = null;
+    private LevelLocation ClickLocationFilter
+    {
+        get{ return clickLocationFilter; }
+        set
+        {
+            if (clickLocationFilter != value)
+            {
+                clickLocationFilter=value;
+                if (clickLocationFilter != null)
+                {
+                    click_SchoolToStudentsDictioanry= BigInfoSet.FilterByLocation(clickLocationFilter).SchoolToStudentsDictionary;
+                }
+                StateHasChanged();
+            }
+        }
+    }
+    private Dictionary<SchoolInfo,List<StudentInfo>> click_SchoolToStudentsDictioanry = null;
     
     public string MapSizeStyle
     {
@@ -74,5 +105,20 @@
         //    pictureItemStructure.Path = System.IO.Path.Combine(BasePath, pictureItemStructure.Path).Replace('\\', '/');
         //    pictureSetProjectFile.PictureItems[i] = pictureItemStructure;
         //}
+    }
+
+    public void OnPointerMapItemChangedHandler(LevelLocation location)
+    {
+        
+    }
+
+    public void OnClickMapItemHandler(LevelLocation location)
+    {
+        ClickLocationFilter = location;
+    }
+
+    public void OnClick()
+    {
+        //ClickLocationFilter = null;
     }
 }

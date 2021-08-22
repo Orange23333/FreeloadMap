@@ -15,10 +15,19 @@ namespace FreeloadMap.Data.SourceTypes
 
         public object Resolve(string path)
         {
+            int i;
+
             SchoolInfosFile schoolInfosFile = new SchoolInfosFile();
             schoolInfosFile.Load(path);
+            SchoolInfo[] r = schoolInfosFile.CompleteIconSrc();
+            for (i = 0; i < r.Length; i++)
+            {
+                string temp;
+                temp = PictureItemStructure.GetAbsolutePath(schoolInfosFile.Path, r[i].IconPath);
+                r[i].IconPath = PictureItemStructure.GetRelativePath(DefineValues.WwwrootEmptyFilePath, temp);
+            }
 
-            return schoolInfosFile.CompleteIconSrc();
+            return r;
         }
     }
 }

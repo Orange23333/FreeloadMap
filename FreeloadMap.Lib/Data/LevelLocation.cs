@@ -16,7 +16,7 @@ namespace FreeloadMap.Lib.Data
     /// 建议使用LevelLocation.AnyLocation.GetCopy()来获取一个初始化的LevelLocation。
     /// </remarks>
     [JsonObject(MemberSerialization.OptIn)]
-    public class LevelLocation : IComparable<LevelLocation>
+    public class LevelLocation : IComparable<LevelLocation>, IEquatable<LevelLocation>
     {
         // 未写
         public static readonly string Empty = ""; // String.Empty;
@@ -289,6 +289,15 @@ namespace FreeloadMap.Lib.Data
             }
 
             return word0.CompareTo(word1);
+        }
+
+        public bool Equals(LevelLocation other)
+        {
+            return this.Country == other.Country &&
+                this.Province == other.Province &&
+                this.City == other.City &&
+                this.District == other.District &&
+                this.DetailAddress == other.DetailAddress;
         }
 
         /// <remarks>

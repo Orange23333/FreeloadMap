@@ -1,0 +1,42 @@
+﻿<div class="card-group" style="left: @(LeftToParent.ToString())px; top: 16px; position: absolute;">
+	@if (SchoolToStudentsDictionary.Count > 0)
+	{
+		@foreach (SchoolInfo schoolInfo in SchoolToStudentsDictionary.Keys)
+		{
+			<div class="card" style="width: 64px;">
+				<img src="@schoolInfo.IconPath" alt="@schoolInfo.Name" class="card-img-top"/>
+				<div class="card-body">
+					<p class="card-title"><b>@(schoolInfo.Name)</b></p>
+					@foreach(StudentInfo studentInfo in SchoolToStudentsDictionary[schoolInfo])
+					{
+						<p class="card-text">@(studentInfo.Name)</p>
+					}
+					<!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+				</div>
+			</div>
+		}
+	}else{
+		<div class="card" style="width: 64px;">
+			<div class="card-body">
+				<p class="card-title"><b>无</b></p>
+			</div>
+		</div>
+	}
+	<button type="button" class="close" @onclick="Close_OnClick">&times;</button>
+</div>
+
+@code {
+	[Parameter]
+	public double LeftToParent{ get; set; }
+
+	[Parameter]
+	public Dictionary<SchoolInfo,List<StudentInfo>> SchoolToStudentsDictionary{ get; set; }
+
+	[Parameter]
+	public EventCallback OnClickClose{ get; set; }
+
+	public void Close_OnClick()
+	{
+		OnClickClose.InvokeAsync(null);
+	}
+}
