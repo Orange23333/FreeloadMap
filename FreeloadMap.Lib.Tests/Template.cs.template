@@ -1,0 +1,24 @@
+using NUnit.Framework;
+
+namespace FreeloadMap.Lib.Tests
+{
+    public class Template
+    {
+        [SetUp]
+        public void Setup()
+        {
+        }
+
+        [Test]
+        public void Test1()
+        {
+            Assert.Pass();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+
+        }
+    }
+}

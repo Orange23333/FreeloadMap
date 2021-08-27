@@ -2,6 +2,20 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <Copyright>Copyright © Bisitsoft 2021</Copyright>
+    <Company>Bisitsoft</Company>
+    <Authors>Orange233</Authors>
+    <Description>Official website: https://www.ourorangenet.com .</Description>
+    <PackageReleaseNotes>Official website: https://www.ourorangenet.com .</PackageReleaseNotes>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>

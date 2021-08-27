@@ -77,7 +77,9 @@ namespace FreeloadMap.Data
 
                 ISourceTypeResolver sourceTypeResolver = SourceTypeResolverManager.SourceTypeResolvers[sourceConfigItem.SourceType];
 
+#if _SYS_PATH_URI
                 string absolutePath = GetAbsolutePath(sourceConfigItem.Path);
+#elif _LIB_PATH_URI
                 object sourceTypeResolverReturn = sourceTypeResolver.Resolve(absolutePath);
 
                 if (sourceTypeResolver.ReturnType == typeof(PictureItemStructure[]))

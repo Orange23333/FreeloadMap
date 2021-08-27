@@ -7,6 +7,9 @@
             <PictureSet_Item PictureItem=@(PictureItemDictionary[locationPictureBindingToPictureName.Value]) ViewMode=@ViewMode ThisLocation=@(locationPictureBindingToPictureName.Key) OnPointerMapItemChanged="@OnPointerMapItemChangedHandler" OnClickMapItem="@OnClickMapItemHandler" ForceShadow=@(locationPictureBindingToPictureName.Key==ClickLocationFilter) PepoleAmount=@(filteredBigInfoSet.FindInLocationToSchoolsDictionary(locationPictureBindingToPictureName.Key).Count) />
         }
 
+        <!-- DEBUG -->
+        <!-- <PictureSet_Item PictureItem=@(PictureItemDictionary[filteredBigInfoSet.LocationPictureBindingDictionary.First().Value]) ViewMode=@ViewMode ThisLocation=@(filteredBigInfoSet.LocationPictureBindingDictionary.First().Key) OnPointerMapItemChanged="@OnPointerMapItemChangedHandler" OnClickMapItem="@OnClickMapItemHandler" ForceShadow=@(filteredBigInfoSet.LocationPictureBindingDictionary.First().Key==ClickLocationFilter) PepoleAmount=@(filteredBigInfoSet.FindInLocationToSchoolsDictionary(filteredBigInfoSet.LocationPictureBindingDictionary.First().Key).Count) /> -->
+
         @if (ViewMode == MapViewMode.Direct)
         {
             

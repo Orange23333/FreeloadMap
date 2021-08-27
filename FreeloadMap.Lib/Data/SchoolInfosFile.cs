@@ -42,7 +42,11 @@ namespace FreeloadMap.Lib.Data
             }
 
             //为了快速解锁schoolInfos，这里分开拷贝和补全部分。
+#if _SYS_PATH_URI
             DirectoryInfo directoryInfo = new DirectoryInfo(System.IO.Path.GetDirectoryName(this.Path).Replace('\\', '/'));
+#elif _LIB_PATH_URI
+            DirectoryInfo directoryInfo = new DirectoryInfo(FreeloadMap.Lib.Utility.FkPath.GetDirectory(this.Path));
+#endif
             FileInfo[] fileInfos = directoryInfo.GetFiles();
             for (i = 0; i < newSchoolInfos.Length; i++)
             {
@@ -56,7 +60,7 @@ namespace FreeloadMap.Lib.Data
                         var maySupportFiles = from val in sameNameFiles
                                               where Regex.IsMatch(
                                                   System.IO.Path.GetExtension(val.Name),
-                                                  String.Format("^\\.(bmp|dib|gif|jpg|jpeg|jpe|jfif|png|tif|tiff|heic|webp)$")
+                                                  String.Format("^\\.(svg|bmp|dib|gif|jpg|jpeg|jpe|jfif|png|tif|tiff|heic|webp)$")
                                                   )
                                               select val;
                         if(maySupportFiles.Count() > 0)
@@ -64,12 +68,25 @@ namespace FreeloadMap.Lib.Data
                             var greatFormatFiles = from val in maySupportFiles
                                                    where Regex.IsMatch(
                                                     System.IO.Path.GetExtension(val.Name),
-                                                    String.Format("^\\.(bmp|dib|gif|jpg|jpeg|jpe|jfif|png|tif|tiff)$")
+                                                    String.Format("^\\.(svg|bmp|dib|gif|jpg|jpeg|jpe|jfif|png|tif|tiff)$")
                                                     )
                                                    select val;
                             if(greatFormatFiles.Count() > 0)
                             {
-                                newSchoolInfos[i].IconPath = greatFormatFiles.First().Name;
+                                var bestFormatFiles = from val in greatFormatFiles
+                                                      where Regex.IsMatch(
+                                                      System.IO.Path.GetExtension(val.Name),
+                                                      String.Format("^\\.svg$")
+                                                      )
+                                                      select val;
+                                if (bestFormatFiles.Count() > 0)
+                                {
+                                    newSchoolInfos[i].IconPath = bestFormatFiles.First().Name;
+                                }
+                                else
+                                {
+                                    newSchoolInfos[i].IconPath = greatFormatFiles.First().Name;
+                                }
                             }
                             else
                             {

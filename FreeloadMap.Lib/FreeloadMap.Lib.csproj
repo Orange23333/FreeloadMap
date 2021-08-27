@@ -11,6 +11,14 @@
 		<PackageReleaseNotes>Official website: https://www.ourorangenet.com .</PackageReleaseNotes>
 	</PropertyGroup>
 
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+	  <DefineConstants>TRACE;_LIB_PATH_URI</DefineConstants>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <DefineConstants>TRACE;_LIB_PATH_URI</DefineConstants>
+	</PropertyGroup>
+
 	<!--https://blog.csdn.net/sgmcumt/article/details/102510084-->
 
 	<!-- Need to conditionally bring in references for the .NET Core 3.1 target -->

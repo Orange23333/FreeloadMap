@@ -8,10 +8,15 @@
     <Company>Bisitsoft</Company>
     <Authors>Orange233</Authors>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;_LIB_PATH_URI</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DefineConstants>TRACE;_LIB_PATH_URI</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -23,6 +28,10 @@
     <EmbeddedResource Remove="wwwroot\img\**" />
     <None Remove="wwwroot\images\school\**" />
     <None Remove="wwwroot\img\**" />
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
   </ItemGroup>
 
   <ItemGroup>

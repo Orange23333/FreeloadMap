@@ -2,7 +2,6 @@
     <img id="mapgeo-img" src="@ImageSrc" alt="@ImageAlt" style="@ImageStyle" @onmouseover="OnPointerEnter" @onpointerenter="OnPointerEnter" @ontouchenter="OnPointerEnter" @onmouseout="OnPointerLeave" @onpointerleave="OnPointerLeave" @ontouchleave="OnPointerLeave" @onclick="OnClick" @ontouchstart="OnClick" @ontouchend="OnClickOut"/>
 </span>
 
-
 @code {
     [Parameter]
     public PictureItemStructure PictureItem{ get; set; }
@@ -134,4 +133,10 @@
     {
         OnClickMapItem.InvokeAsync(null).Wait();
     }
+
+    //// https://stackoverflow.com/questions/59804966/blazor-problem-with-updating-bootstrap-tooltip
+    //protected override async Task OnAfterRenderAsync(bool firstRender)
+    //{
+    //    await JsRuntime.InvokeVoidAsync("setTooltip");
+    //}
 }
