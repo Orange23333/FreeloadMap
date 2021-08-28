@@ -4,6 +4,8 @@ using System.Text;
 
 using Newtonsoft.Json;
 
+using FreeloadMap.Lib.Utility;
+
 namespace FreeloadMap.Lib.Data
 {
     [JsonObject(MemberSerialization.OptIn)]
@@ -15,7 +17,12 @@ namespace FreeloadMap.Lib.Data
         {
             get
             {
-                return System.IO.Path.GetDirectoryName(this.Path).Replace('\\', '/'); //如果c是目录，位置是a/b/c，返回的是a/b
+#if _SYS_PATH_URI
+#warning 如果c是目录，位置是a/b/c，返回的是a/b
+                return System.IO.Path.GetDirectoryName(this.Path).Replace('\\', '/');
+#elif _LIB_PATH_URI
+                return FkPath.GetDirectory(this.Path);
+#endif
             }
         }
 

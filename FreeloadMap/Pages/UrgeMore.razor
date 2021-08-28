@@ -59,7 +59,11 @@
                 //处理Cache
                 lock (urgeMoreInfoCache)
                 {
+#if _SYS_PATH_URI
                     string basePath = Path.Combine(Environment.CurrentDirectory, "wwwroot/data/urgemore/");
+#elif _LIB_PATH_URI
+                    string basePath = FkPath.Combine(Environment.CurrentDirectory, "wwwroot/data/urgemore/", FkPath.DirectorySeparator.Backslash);
+#endif
                     foreach (UrgeMoreInfo urgeMoreInfo in urgeMoreInfoCache)
                     {
                         string jsonText = Newtonsoft.Json.JsonConvert.SerializeObject(urgeMoreInfo);
@@ -82,7 +86,11 @@
                             }
                         }
 
+#if _SYS_PATH_URI
                         File.WriteAllText(Path.Combine(basePath, freeGuid.ToString() + ".ugm.json"), jsonText);
+#elif _LIB_PATH_URI
+                        File.WriteAllText(FkPath.Combine(basePath, freeGuid.ToString() + ".ugm.json", FkPath.DirectorySeparator.Backslash), jsonText);
+#endif
 
                         urgeMoreInfos.Add(urgeMoreInfo);
                     }
@@ -200,7 +208,11 @@
     }
     private static void LoadUrgeMoreInfos()
     {
+#if _SYS_PATH_URI
         DirectoryInfo dataDir = new DirectoryInfo(Path.Combine(Environment.CurrentDirectory, "wwwroot/data/urgemore"));
+#elif _LIB_PATH_URI
+        DirectoryInfo dataDir = new DirectoryInfo(FkPath.Combine(Environment.CurrentDirectory, "wwwroot/data/urgemore", FkPath.DirectorySeparator.Backslash));
+#endif
         FileInfo[] urgeMoreFiles = dataDir.GetFiles("*.ugm.json");
         urgeMoreInfos = new List<UrgeMoreInfo>();
 

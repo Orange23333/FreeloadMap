@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 
 using FreeloadMap.Data.SourceTypes;
 using FreeloadMap.Lib.Data;
+using FreeloadMap.Lib.Utility;
 
 namespace FreeloadMap.Data
 {
@@ -76,10 +77,7 @@ namespace FreeloadMap.Data
                 }
 
                 ISourceTypeResolver sourceTypeResolver = SourceTypeResolverManager.SourceTypeResolvers[sourceConfigItem.SourceType];
-
-#if _SYS_PATH_URI
                 string absolutePath = GetAbsolutePath(sourceConfigItem.Path);
-#elif _LIB_PATH_URI
                 object sourceTypeResolverReturn = sourceTypeResolver.Resolve(absolutePath);
 
                 if (sourceTypeResolver.ReturnType == typeof(PictureItemStructure[]))
@@ -131,7 +129,11 @@ namespace FreeloadMap.Data
         }
         private string GetAbsolutePath(string relativePath)
         {
+#if _SYS_PATH_URI
             return new Uri(new Uri(System.IO.Path.GetFullPath(this.Path).Replace('\\', '/'), UriKind.Absolute), new Uri(relativePath, UriKind.Relative)).LocalPath;
+#elif _LIB_PATH_URI
+            return FkPath.GetAbsolutePath(System.IO.Path.GetFullPath(this.Path), relativePath, FkPath.DirectorySeparator.Backslash, false);
+#endif
         }
         public static IEnumerable<LocationPictureBinding> AutoComplete_LocationPictureBinding(PictureItemStructure[] pictureItems)
         {

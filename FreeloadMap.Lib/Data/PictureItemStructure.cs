@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 using Newtonsoft.Json;
 
+using FreeloadMap.Lib.Utility;
+
 namespace FreeloadMap.Lib.Data
 {
 #warning 可以直接把这个改成接口，让PIControl继承。不过这样web段就需要一个类来实现这个接口会有点不方便。
@@ -84,13 +86,21 @@ namespace FreeloadMap.Lib.Data
         }
         public static string GetAbsolutePath(string basePath, string relativePath)
         {
+#if _SYS_PATH_URI
             //return new Uri(new Uri(basePath, UriKind.Absolute), relativePath).AbsoluteUri;
             return new Uri(new Uri(basePath, UriKind.Absolute), new Uri(relativePath, UriKind.Relative)).LocalPath;
+#elif _LIB_PATH_URI
+            return FkPath.GetAbsolutePath(basePath, relativePath, FkPath.DirectorySeparator.Backslash, false);
+#endif
         }
         /// <param name="basePath">应为工程文件位置。</param>
         public static string GetRelativePath(string basePath, string absolutePath)
         {
+#if _SYS_PATH_URI
             return new Uri(basePath, UriKind.Absolute).MakeRelativeUri(new Uri(absolutePath, UriKind.Absolute)).ToString(); // 测试结果这是对的，但我也不知道Uri这什么语法、原理。
+#elif _LIB_PATH_URI
+            return FkPath.GetRelativePath(basePath, absolutePath, FkPath.DirectorySeparator.Backslash);
+#endif
         }
 
         public static Dictionary<string, PictureItemStructure> ToDictionaryByName(IEnumerable<PictureItemStructure> pictureItemStructures)

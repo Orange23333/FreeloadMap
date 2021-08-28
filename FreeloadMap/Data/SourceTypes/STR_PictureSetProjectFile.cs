@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 
 using FreeloadMap.Lib.Data;
+using FreeloadMap.Lib.Utility;
 
 namespace FreeloadMap.Data.SourceTypes
 {
@@ -24,8 +25,8 @@ namespace FreeloadMap.Data.SourceTypes
             for (i = 0; i < pictureItemStructures.Length; i++)
             {
                 PictureItemStructure temp = pictureItemStructures[i];
-                string absolutePath = PictureItemStructure.GetAbsolutePath(pictureSetProjectFile.Path, temp.Path);
-                temp.Path = PictureItemStructure.GetRelativePath(DefineValues.WwwrootEmptyFilePath, absolutePath);
+                string absolutePath = FkPath.GetAbsolutePath(pictureSetProjectFile.Path, temp.Path, FkPath.DirectorySeparator.Backslash, false);
+                temp.Path = FkPath.GetRelativePath(DefineValues.WwwrootEmptyFilePath, absolutePath, FkPath.DirectorySeparator.Backslash);
                 pictureItemStructures[i] = temp;
             }
 

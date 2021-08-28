@@ -43,7 +43,11 @@
     public string ImageSpanStyle
     {
         get{
+#if _SYS_PATH_URI
             Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
+#elif _LIB_PATH_URI
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", PictureItem.Path, FkPath.DirectorySeparator.Backslash));
+#endif
 
 #warning 不清楚中心点是否与scale有关
             return String.Format(
@@ -65,7 +69,11 @@
     {
         get
         {
+#if _SYS_PATH_URI
             Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
+#elif _LIB_PATH_URI
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", PictureItem.Path, FkPath.DirectorySeparator.Backslash));
+#endif
 
 #warning 不清楚中心点是否与scale有关
             StringBuilder styleText = new StringBuilder();
