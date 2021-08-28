@@ -49,6 +49,11 @@ namespace FreeloadMap.Lib.Utility
             }
 
             //获取短路径来保证接下来的比对。
+            //这里的_referenceAbsolutePath是文件夹路径，不是文件路径。
+            //#warning ReplaceDirectorySeparator()是否需要？
+            //string _referenceAbsolutePath = NormalizeHeader(GetDirectory(ReplaceDirectorySeparator(GetShortPath(referenceAbsolutePath, true), directorySeparator)));
+            //string _absolutePath = NormalizeHeader(ReplaceDirectorySeparator(GetShortPath(absolutePath, true), directorySeparator));
+#warning NormalizeHeader()是否需要？
             string _referenceAbsolutePath = NormalizeHeader(GetDirectory(GetShortPath(referenceAbsolutePath, true)));
             string _absolutePath = NormalizeHeader(GetShortPath(absolutePath, true));
 
@@ -160,9 +165,13 @@ namespace FreeloadMap.Lib.Utility
                     count++;
                 }
             }
-            temp = absolutePath[begin];
-            if (temp != '\\' || temp != '/'){
-                count++;
+            if (begin < absolutePath.Length)
+            {
+                temp = absolutePath[begin];
+                if (temp != '\\' || temp != '/')
+                {
+                    count++;
+                }
             }
 
             if (IsFile(absolutePath))
@@ -198,11 +207,14 @@ namespace FreeloadMap.Lib.Utility
 
         public static string NormalizeHeader(string path)
         {
+            Regex regex = new Regex("^[A-Za-z]:[\\\\/]([\\\\/]+)");
+
             if (IsAbsolutePath(path, false))
             {
-                if (Regex.IsMatch(path, "^[A-Za-z]:[\\\\/[\\\\/]]"))
+                Match match = regex.Match(path);
+                if (match.Success)
                 {
-                    return path.Remove(2, 1); //将“C://”替换为“C:/”
+                    return path.Remove(3, match.Groups[1].Value.Length); //将“C://”替换为“C:/”
                 }
             }
 
