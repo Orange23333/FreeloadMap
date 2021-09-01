@@ -13,28 +13,16 @@ namespace FreeloadMap.Lib.Data
     {
         private string path = null;
         public string Path { get { return path; } set { path = value; } }
-        public string Directory
-        {
-            get
-            {
-#if _SYS_PATH_URI
-#warning 如果c是目录，位置是a/b/c，返回的是a/b
-                return System.IO.Path.GetDirectoryName(this.Path).Replace('\\', '/');
-#elif _LIB_PATH_URI
-                return FkPath.GetDirectory(this.Path);
-#endif
-            }
-        }
 
-        public static readonly Version SupportiveNewestProjectVersion = new Version(1, 0);
-        public static readonly Version SupportiveOldestProjectVersion = new Version(1, 0);
+        public static readonly Version SupportiveNewestProjectVersion = new Version(2, 0);
+        public static readonly Version SupportiveOldestProjectVersion = new Version(2, 0);
         private Version thisProjectVersion = SupportiveNewestProjectVersion;
         [JsonProperty(nameof(ProjectVersion))]
         public Version ProjectVersion { get { return thisProjectVersion; } set { thisProjectVersion = value; } }
 
-        private List<PictureItemStructure> pictureItems = new List<PictureItemStructure>();
-        [JsonProperty(nameof(PictureItems))]
-        public List<PictureItemStructure> PictureItems { get { return pictureItems; } set { pictureItems = value; } }
+        private List<IPictureItemData> pictureItemData = new List<IPictureItemData>();
+        [JsonProperty(nameof(PictureItemData))]
+        public List<IPictureItemData> PictureItemData { get { return pictureItemData; } set { pictureItemData = value; } }
 
         private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings()
         {
@@ -69,7 +57,7 @@ namespace FreeloadMap.Lib.Data
 
             PictureSetProjectFile pictureSetProjectFile = (PictureSetProjectFile)JsonConvert.DeserializeObject<PictureSetProjectFile>(System.IO.File.ReadAllText(path), jsonSerializerSettings);
             this.ProjectVersion = pictureSetProjectFile.ProjectVersion;
-            this.PictureItems = pictureSetProjectFile.PictureItems;
+            this.PictureItemData = pictureSetProjectFile.PictureItemData;
             //ResetHasChanged();
         }
 

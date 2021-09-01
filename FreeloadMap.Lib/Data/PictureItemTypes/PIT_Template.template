@@ -1,0 +1,50 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+using Newtonsoft.Json;
+
+namespace FreeloadMap.Lib.Data.PictureItemTypes
+{
+    [JsonObject(MemberSerialization.OptIn)]
+#warning HERE
+    public class PIT_Template : IPictureItemData
+    {
+        #region ==IPictureItemData==
+#warning HERE
+        public string TypeName { get { return KnownPictureItemTypeNames.Template; } }
+
+        public string Name { get; set; }
+
+        public string Path { get; set; }
+
+#warning HERE
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented
+        };
+
+        public string SerializeData()
+        {
+#warning HERE
+            string json = JsonConvert.SerializeObject(this, jsonSerializerSettings);
+            return json;
+        }
+
+        public void DeserializeData(string data)
+        {
+#warning HERE
+            PIT_Template template = JsonConvert.DeserializeObject<PIT_Template>(data);
+
+            this.Property = template.Property;
+            //...
+        }
+
+        public Dictionary<string, string> ExValues { get; set; }
+        #endregion
+
+#warning HERE
+        [JsonProperty(nameof(Property))]
+        public object Property { get; set; }
+    }
+}

@@ -36,6 +36,16 @@ namespace FreeloadMap.Data
             PrepareHeaderForMatch = args => args.Header.ToLower()
         };
 
+        public string GetValueOrDefault(string key)
+        {
+            Configs.TryGetValue(key, out string r);
+            if (r == null)
+            {
+                return DefaultConfigs.GetValueOrDefault(key);
+            }
+            return r;
+        }
+
         public void Load(string path)
         {
             using (var reader = new StreamReader(path))
@@ -60,5 +70,11 @@ namespace FreeloadMap.Data
 
             this.path = path;
         }
+
+        public Dictionary<string, string> DefaultConfigs { get; set; } = new Dictionary<string, string>()
+        {
+            {"TotalTitle", "Freeload Map"},
+            {"SecondaryTitle", "Justice is Freeload."}
+        };
     }
 }

@@ -28,14 +28,17 @@
     <EmbeddedResource Remove="wwwroot\img\**" />
     <None Remove="wwwroot\images\school\**" />
     <None Remove="wwwroot\img\**" />
+    <Compile Remove="Data\KnownPictureItemHtmlConvertNames.cs" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
+    <None Include="Data\KnownPictureItemHtmlConvertNames.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Blazor.Extensions.Canvas" Version="1.1.1" />
+    <PackageReference Include="CsQuery" Version="1.3.4" />
     <PackageReference Include="MimeMapping" Version="1.0.1.37" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>

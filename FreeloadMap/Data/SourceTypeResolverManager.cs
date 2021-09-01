@@ -27,9 +27,5 @@ namespace FreeloadMap.Data
         {
             sourceTypeResolvers.Remove(name);
         }
-        public static void Remove(ISourceTypeResolver sourceTypeResolver)
-        {
-            sourceTypeResolvers.Remove(sourceTypeResolver.Name);
-        }
     }
 }

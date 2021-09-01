@@ -1,0 +1,52 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+using Newtonsoft.Json;
+
+using FreeloadMap.Lib.Utility;
+
+namespace FreeloadMap.Lib.Data
+{
+    [JsonObject(MemberSerialization.OptIn)]
+    public struct PictureItemStructure
+    {
+        [JsonProperty(nameof(Name))]
+        public string Name { get; set; }
+
+        //public bool Is占位符；Is不是图像
+
+        public static readonly string NoPath = null;
+        [JsonProperty(nameof(Path))]
+        public string Path { get; set; }
+
+        [JsonProperty(nameof(Data))]
+        public string Data { get; set; }
+
+        [JsonProperty(nameof(ExValues))]
+        public Dictionary<string, string> ExValues { get; set; }
+
+        public static bool Equals(PictureItemStructure x, PictureItemStructure y)
+        {
+            return String.Equals(x.Name, y.Name);
+        }
+
+        public static Dictionary<string, PictureItemStructure> ToDictionaryByName(IEnumerable<PictureItemStructure> pictureItemStructures)
+        {
+            Dictionary<string, PictureItemStructure> r = new Dictionary<string, PictureItemStructure>();
+
+            lock (pictureItemStructures)
+            {
+                foreach(PictureItemStructure pictureItemStructure in pictureItemStructures)
+                {
+                    r.Add(pictureItemStructure.Name, pictureItemStructure);
+                }
+            }
+
+            return r;
+        }
+    }
+}

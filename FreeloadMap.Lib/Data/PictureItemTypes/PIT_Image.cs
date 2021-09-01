@@ -9,16 +9,46 @@ using Newtonsoft.Json;
 
 using FreeloadMap.Lib.Utility;
 
-namespace FreeloadMap.Lib.Data
+namespace FreeloadMap.Lib.Data.PictureItemTypes
 {
 #warning 可以直接把这个改成接口，让PIControl继承。不过这样web段就需要一个类来实现这个接口会有点不方便。
     // 暂不支持自定义z序（我不暂时需要），不过这里还是应当保留z序字段。
     // Name(目前自动设置为文件名)|Position|TransformOrigin(目前自动设置为0.0,0.0)|Scale(目前自动设置为1.0,1.0)|RotateAngle(目前自动设置为0)|Opacity(目前自动设置为1.0)|ZIndex|Path|ExValues(目前自动设置为null)
     [JsonObject(MemberSerialization.OptIn)]
-    public struct PictureItemStructure
+    public class PIT_Image : IPictureItemData
     {
-        [JsonProperty(nameof(Name))]
+        private static readonly JsonSerializerSettings jsonSerializerSettings = new JsonSerializerSettings()
+        {
+            Formatting = Formatting.Indented
+        };
+
+        #region ==IPictureItemData==
+        public string TypeName { get { return KnownPictureItemTypeNames.Image; } }
+
         public string Name { get; set; }
+
+        public string Path { get; set; }
+
+        public string SerializeData()
+        {
+            string json = JsonConvert.SerializeObject(this, jsonSerializerSettings);
+            return json;
+        }
+
+        public void DeserializeData(string data)
+        {
+            PIT_Image image = JsonConvert.DeserializeObject<PIT_Image>(data);
+
+            this.Position = image.Position;
+            this.TransformOrigin = image.TransformOrigin;
+            this.Scale = image.Scale;
+            this.RotateAngle = image.RotateAngle;
+            this.Opacity = image.Opacity;
+            this.ZIndex = image.ZIndex;
+        }
+
+        public Dictionary<string, string> ExValues { get; set; }
+        #endregion
 
         [JsonProperty(nameof(Position))]
         public Tuple<double, double> Position { get; set; }
@@ -38,26 +68,20 @@ namespace FreeloadMap.Lib.Data
         [JsonProperty(nameof(ZIndex))]
         public int ZIndex { get; set; }
 
-        [JsonProperty(nameof(Path))]
-        public string Path { get; set; }
-
-        [JsonProperty(nameof(ExValues))]
-        public Dictionary<string, string> ExValues { get; set; }
-
         /// <remarks>
         /// 实际调用Create(string,double,double,int)。这只是为了某种方便设置的函数
         /// </remarks>
-        public static PictureItemStructure Create(string path, double x, double y, int zIndex)
+        public static PIT_Image Create(string path, double x, double y, int zIndex)
         {
             return Create(x, y, zIndex, path);
         }
-        public static PictureItemStructure Create(double x, double y, int zIndex, string path)
+        public static PIT_Image Create(double x, double y, int zIndex, string path)
         {
-            return new PictureItemStructure()
+            return new PIT_Image()
             {
                 Name = System.IO.Path.GetFileName(path),
                 Position = new Tuple<double, double>(x, y),
-                TransformOrigin =new Tuple<double, double>(0.0, 0.0),
+                TransformOrigin = new Tuple<double, double>(0.0, 0.0),
                 Scale = new Tuple<double, double>(1.0, 1.0),
                 RotateAngle = 0.0,
                 Opacity = 1.0,
@@ -67,20 +91,20 @@ namespace FreeloadMap.Lib.Data
             };
         }
 
-        public static bool Equals(PictureItemStructure x, PictureItemStructure y)
+        public static bool Equals(PIT_Image x, PIT_Image y)
         {
             return String.Equals(x.Name, y.Name); // https://github.com/dotnet/core/issues/5078
         }
 
-        public PictureItemStructure ToAbsolutePath(string basePath)
+        public PIT_Image ToAbsolutePath(string basePath)
         {
-            PictureItemStructure pictureItemStructure = (PictureItemStructure)this.MemberwiseClone();
+            PIT_Image pictureItemStructure = (PIT_Image)this.MemberwiseClone();
             pictureItemStructure.Path = GetAbsolutePath(basePath, pictureItemStructure.Path);
             return pictureItemStructure;
         }
-        public PictureItemStructure ToRelativePath(string basePath)
+        public PIT_Image ToRelativePath(string basePath)
         {
-            PictureItemStructure pictureItemStructure = (PictureItemStructure)this.MemberwiseClone();
+            PIT_Image pictureItemStructure = (PIT_Image)this.MemberwiseClone();
             pictureItemStructure.Path = GetRelativePath(basePath, pictureItemStructure.Path);
             return pictureItemStructure;
         }
@@ -103,13 +127,13 @@ namespace FreeloadMap.Lib.Data
 #endif
         }
 
-        public static Dictionary<string, PictureItemStructure> ToDictionaryByName(IEnumerable<PictureItemStructure> pictureItemStructures)
+        public static Dictionary<string, PIT_Image> ToDictionaryByName(IEnumerable<PIT_Image> pictureItemStructures)
         {
-            Dictionary<string, PictureItemStructure> r = new Dictionary<string, PictureItemStructure>();
+            Dictionary<string, PIT_Image> r = new Dictionary<string, PIT_Image>();
 
             lock (pictureItemStructures)
             {
-                foreach(PictureItemStructure pictureItemStructure in pictureItemStructures)
+                foreach (PIT_Image pictureItemStructure in pictureItemStructures)
                 {
                     r.Add(pictureItemStructure.Name, pictureItemStructure);
                 }

@@ -3,8 +3,16 @@
 </span>
 
 @code {
+    private PictureItemStructure pictureItem;
     [Parameter]
-    public PictureItemStructure PictureItem{ get; set; }
+    public PictureItemStructure PictureItem { get { return pictureItem; } set { pictureItem = value; Refresh_ImageFileExtsion(); } }
+
+    private string imageFileExtsion = null;
+    public string ImageFileExtsion { get { return imageFileExtsion; } set { imageFileExtsion = value; } } // set留用解决一些名称后缀问题。
+    public void Refresh_ImageFileExtsion()
+    {
+        imageFileExtsion = System.IO.Path.GetExtension(pictureItem.Path);
+    }
 
     [Parameter]
     public MapViewMode ViewMode{ get; set; }
@@ -28,7 +36,7 @@
     {
         get
         {
-            return System.IO.Path.GetFileNameWithoutExtension(PictureItem.Name);
+            return System.IO.Path.GetFileNameWithoutExtension(pictureItem.Name);
         }
     }
 
@@ -36,7 +44,7 @@
     {
         get
         {
-            return PictureItem.Path;
+            return pictureItem.Path;
         }
     }
 
@@ -46,7 +54,7 @@
 #if _SYS_PATH_URI
             Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
 #elif _LIB_PATH_URI
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", PictureItem.Path, FkPath.DirectorySeparator.Backslash));
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", pictureItem.Path, FkPath.DirectorySeparator.Backslash));
 #endif
 
 #warning 不清楚中心点是否与scale有关
@@ -56,11 +64,11 @@
                 "transform-origin: {2}% {3}%; " +
                 "z-index: {4}; " +
                 "position: absolute;",
-                PictureItem.Position.Item1,
-                PictureItem.Position.Item2,
-                PictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
-                PictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
-                (useShadowClass ? int.MaxValue : PictureItem.ZIndex)
+                pictureItem.Position.Item1,
+                pictureItem.Position.Item2,
+                pictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
+                pictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
+                (useShadowClass ? int.MaxValue : pictureItem.ZIndex)
             );
         }
     }
@@ -72,7 +80,7 @@
 #if _SYS_PATH_URI
             Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
 #elif _LIB_PATH_URI
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", PictureItem.Path, FkPath.DirectorySeparator.Backslash));
+            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", pictureItem.Path, FkPath.DirectorySeparator.Backslash));
 #endif
 
 #warning 不清楚中心点是否与scale有关
@@ -85,14 +93,14 @@
                 "transform: rotate({4}deg); " +
                 "opacity: {5}; " +
                 "position: absolute;",
-                PictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
-                PictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
-                //PictureItem.Scale.Item1,
-                //PictureItem.Scale.Item2,
-                PictureItem.Scale.Item1 * bitmap.Width/* * (useShadowClass || ForceShadow ? 1.2 : 1.0)*/,
-                PictureItem.Scale.Item2 * bitmap.Height/* * (useShadowClass || ForceShadow ? 1.2 : 1.0)*/,
-                PictureItem.RotateAngle,
-                PictureItem.Opacity
+                pictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
+                pictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
+                //pictureItem.Scale.Item1,
+                //pictureItem.Scale.Item2,
+                pictureItem.Scale.Item1 * bitmap.Width/* * (useShadowClass || ForceShadow ? 1.2 : 1.0)*/,
+                pictureItem.Scale.Item2 * bitmap.Height/* * (useShadowClass || ForceShadow ? 1.2 : 1.0)*/,
+                pictureItem.RotateAngle,
+                pictureItem.Opacity
             ));
             #warning String.Format会忽略掉第7个及以后的参数？？？
             styleText.Append(String.Format(

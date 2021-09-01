@@ -1,0 +1,51 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace FreeloadMap.Lib.Data
+{
+    public class HtmlManifestFile
+    {
+        private string path = null;
+        public string Path { get { return path; } set { path = value; } }
+
+        private List<string> caches;
+        public List<string> Caches { get { return caches; } }
+
+        private List<string> noCaches;
+        public List<string> NoCaches { get { return noCaches; } }
+
+        public void Load(string path)
+        {
+            string text = File.ReadAllText(path);
+
+            this.relativeSourcePaths = ReadManifest(text);
+
+            this.path = path;
+        }
+
+        public static List<string> ReadManifest(string text)
+        {
+
+        }
+
+        public static string GetFileText(List<string> manifests)
+        {
+
+        }
+
+        public void Save(string path)
+        {
+            File.WriteAllText(path , GetFileText(this.relativeSourcePaths));
+
+            this.path = path;
+        }
+
+        public HtmlManifestFile()
+        {
+            relativeSourcePaths = new List<string>();
+        }
+    }
+}
