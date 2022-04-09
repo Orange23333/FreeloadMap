@@ -382,3 +382,6 @@ FreeloadMap/wwwroot/data/urgemore/
 FreeloadMap/wwwroot/images/AD_CN/
 FreeloadMap/wwwroot/images/AD_UK/
 FreeloadMap/wwwroot/images/SC/
+FreeloadMap/init.sh
+WebApplication_Test/
+secret/

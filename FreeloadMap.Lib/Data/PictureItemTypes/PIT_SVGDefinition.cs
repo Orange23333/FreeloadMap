@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
+using AngleSharp;
 using Newtonsoft.Json;
+
+using FreeloadMap.Lib.Utility;
 
 namespace FreeloadMap.Lib.Data.PictureItemTypes
 {
@@ -29,14 +33,46 @@ namespace FreeloadMap.Lib.Data.PictureItemTypes
 
         public void DeserializeData(string data)
         {
-#warning HERE
-            PIT_SVGDefinition template = JsonConvert.DeserializeObject<PIT_SVGDefinition>(data);
+            PIT_SVGDefinition svgDefinition = JsonConvert.DeserializeObject<PIT_SVGDefinition>(data);
 
-            this.Property = template.Property;
-            //...
+            this.SVGGroupName = svgDefinition.SVGGroupName;
+            this.SVGDefinitionHtmlText = svgDefinition.SVGDefinitionHtmlText;
         }
 
         public Dictionary<string, string> ExValues { get; set; }
         #endregion
+
+        [JsonProperty(nameof(SVGGroupName))]
+        public string SVGGroupName { get; set; }
+
+        [JsonProperty(nameof(SVGDefinitionHtmlText))]
+        public string SVGDefinitionHtmlText { get; set; }
+
+#warning 没有优化异步
+        public string SVGDefinitionContent
+        {
+            get
+            {
+                var document = BrowsingContext.New().OpenAsync(m => m.Content(SVGDefinitionHtmlText)).Result;
+                var g = document.QuerySelector("svg > g");
+                var targets = g.QuerySelectorAll("g > *");
+                var targetTexts = from val in targets select val.OuterHtml;
+
+                return StringEx.CatStrings(targetTexts);
+            }
+            set
+            {
+                var document = BrowsingContext.New().OpenAsync(m => m.Content(SVGDefinitionHtmlText)).Result;
+                var g = document.QuerySelector("svg > g");
+                var targets = g.QuerySelectorAll("g > *");
+                foreach (var target in targets)
+                {
+                    target.Remove();
+                }
+                g.InnerHtml = value;
+                SVGDefinitionHtmlText = g.QuerySelector("svg").OuterHtml;
+            }
+        }
+
     }
 }

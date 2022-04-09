@@ -16,6 +16,7 @@
         }
         else if(ViewMode == MapViewMode.InBox)
         {
+            <h3><b>@(ClickLocationFilter.ToShortString())</b></h3>
             @if (clickLocationFilter != null)
             {
                 <InBox_Schools LeftToParent="@MapWidth" SchoolToStudentsDictionary=@click_SchoolToStudentsDictioanry OnClickClose=@((object arg)=>{ClickLocationFilter = null;}) />

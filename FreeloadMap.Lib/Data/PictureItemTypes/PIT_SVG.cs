@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
+using AngleSharp;
 using Newtonsoft.Json;
+
+using FreeloadMap.Lib.Utility;
 
 namespace FreeloadMap.Lib.Data.PictureItemTypes
 {
@@ -29,14 +33,45 @@ namespace FreeloadMap.Lib.Data.PictureItemTypes
 
         public void DeserializeData(string data)
         {
-#warning HERE
-            PIT_SVG template = JsonConvert.DeserializeObject<PIT_SVG>(data);
+            PIT_SVG svg = JsonConvert.DeserializeObject<PIT_SVG>(data);
 
-            this.Property = template.Property;
-            //...
+            this.SVGGroupName = svg.SVGGroupName;
+            this.SVGHtmlText = svg.SVGHtmlText;
         }
 
         public Dictionary<string, string> ExValues { get; set; }
         #endregion
+
+        [JsonProperty(nameof(SVGGroupName))]
+        public string SVGGroupName { get; set; }
+
+        [JsonProperty(nameof(SVGHtmlText))]
+        public string SVGHtmlText { get; set; }
+        
+#warning 没有优化异步
+        public string SVGContent
+        {
+            get
+            {
+                var document = BrowsingContext.New().OpenAsync(m => m.Content(SVGHtmlText)).Result;
+                var g = document.QuerySelector("svg > g");
+                var targets = g.QuerySelectorAll("g > *");
+                var targetTexts = from val in targets select val.OuterHtml;
+
+                return StringEx.CatStrings(targetTexts);
+            }
+            set
+            {
+                var document = BrowsingContext.New().OpenAsync(m => m.Content(SVGHtmlText)).Result;
+                var g = document.QuerySelector("svg > g");
+                var targets = g.QuerySelectorAll("g > *");
+                foreach(var target in targets)
+                {
+                    target.Remove();
+                }
+                g.InnerHtml = value;
+                SVGHtmlText = g.QuerySelector("svg").OuterHtml;
+            }
+        }
     }
 }

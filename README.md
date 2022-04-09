@@ -1,4 +1,4 @@
-# 蹭饭地图 Freeload map
+ 蹭饭地图 Freeload map
 
 一个可以白白到手（免费）的蹭饭地图。
 
@@ -32,12 +32,12 @@ A simple software to make `Picture Set Format Project`. **Maybe** the website wi
 
 # 引用 Reference
 
-`Blazor.Extensions.Canvas`, License: [MIT](https://github.com/BlazorExtensions/Canvas/blob/master/LICENSE) (Check on 2021Y.8M.28D 20:42), Project URL: [https://github.com/BlazorExtensions/Canvas](https://github.com/BlazorExtensions/Canvas). (Only include, don't use.)
+`AngleSharp`, License: [MIT](https://github.com/AngleSharp/AngleSharp/blob/devel/LICENSE) (Check on 2021Y.9M.2D 21:43), Project URL: [https://github.com/AngleSharp/AngleSharp](https://github.com/AngleSharp/AngleSharp). (Only include, don't use.)
 
-`CsQuery`, License: [MIT](https://github.com/jamietre/CsQuery/blob/master/LICENSE.txt) (Check on 2021Y.8M.28D 20:46), Project URL: [https://github.com/jamietre/CsQuery/](https://github.com/jamietre/CsQuery/).
+`Blazor.Extensions.Canvas`, License: [MIT](https://github.com/BlazorExtensions/Canvas/blob/master/LICENSE) (Check on 2021Y.8M.28D 20:42), Project URL: [https://github.com/BlazorExtensions/Canvas](https://github.com/BlazorExtensions/Canvas). (Only include, don't use.)
 
 `CsvHelper`, License: [MS-PL and Apache 2.0](https://github.com/JoshClose/CsvHelper/blob/master/LICENSE.txt) (Check on 2021Y.8M.28D 20:49), Project URL: [https://github.com/JoshClose/CsvHelper](https://github.com/JoshClose/CsvHelper).
 
 `MimeMapping`, License: [MIT](https://github.com/zone117x/MimeMapping/blob/master/LICENSE.md) (Check on 2021Y.8M.28D 20:49), Project URL: [https://github.com/zone117x/MimeMapping](https://github.com/zone117x/MimeMapping).
 
-`Newtonsoft.Json`, License: [MIT LICENSE](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md) (Check on 2021Y.8M.6D 14:45), Project URL: [https://www.newtonsoft.com/json](https://www.newtonsoft.com/json).
+`Newtonsoft.Json`, License: [MIT](https://github.com/JamesNK/Newtonsoft.Json/blob/master/LICENSE.md) (Check on 2021Y.8M.6D 14:45), Project URL: [https://www.newtonsoft.com/json](https://www.newtonsoft.com/json).

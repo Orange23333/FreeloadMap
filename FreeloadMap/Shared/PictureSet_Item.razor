@@ -77,32 +77,8 @@
     {
         get
         {
-#if _SYS_PATH_URI
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(System.IO.Path.Combine("wwwroot", PictureItem.Path));
-#elif _LIB_PATH_URI
-            Bitmap bitmap = (Bitmap)Bitmap.FromFile(FkPath.Combine("wwwroot", pictureItem.Path, FkPath.DirectorySeparator.Backslash));
-#endif
-
-#warning 不清楚中心点是否与scale有关
+#warning String.Format会忽略掉第7个及以后的参数？？？
             StringBuilder styleText = new StringBuilder();
-            styleText.Append(String.Format(
-                "transform-origin: {0}% {1}%; " +
-                //"transform: scale({2}, {3}); " +
-                "width: {2}px; " + //注意：这里貌似用百分比不行
-                "height: {3}px; " + //注意：这里貌似用百分比不行
-                "transform: rotate({4}deg); " +
-                "opacity: {5}; " +
-                "position: absolute;",
-                pictureItem.TransformOrigin.Item1 / bitmap.Width * 100.0,
-                pictureItem.TransformOrigin.Item2 / bitmap.Height * 100.0,
-                //pictureItem.Scale.Item1,
-                //pictureItem.Scale.Item2,
-                pictureItem.Scale.Item1 * bitmap.Width/* * (useShadowClass || ForceShadow ? 1.2 : 1.0)*/,
-                pictureItem.Scale.Item2 * bitmap.Height/* * (useShadowClass || ForceShadow ? 1.2 : 1.0)*/,
-                pictureItem.RotateAngle,
-                pictureItem.Opacity
-            ));
-            #warning String.Format会忽略掉第7个及以后的参数？？？
             styleText.Append(String.Format(
                 "-webkit-filter: grayscale({0}%); filter: grayscale({0}%); ",
                 PepoleAmount == 0 ? "100" : "0"

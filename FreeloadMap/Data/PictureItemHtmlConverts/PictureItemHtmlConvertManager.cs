@@ -7,10 +7,13 @@ namespace FreeloadMap.Data.PictureItemHtmlConverts
 {
     public static class PictureItemHtmlConvertManager
     {
-        private static Dictionary<string, IPictureItemHtmlConverts> pictureItemHtmlResolvers = new Dictionary<string, IPictureItemHtmlConverts>();
-        public static Dictionary<string, IPictureItemHtmlConverts> PictureItemHtmlResolvers { get { return pictureItemHtmlResolvers; } }
+        private static Dictionary<string, IPictureItemHtmlConvert> pictureItemHtmlResolvers = new Dictionary<string, IPictureItemHtmlConvert>()
+        {
+            {, }
+        };
+        public static Dictionary<string, IPictureItemHtmlConvert> PictureItemHtmlResolvers { get { return pictureItemHtmlResolvers; } }
 
-        public static void Add(IPictureItemHtmlConverts pictureItemHtmlResolver)
+        public static void Add(IPictureItemHtmlConvert pictureItemHtmlResolver)
         {
             pictureItemHtmlResolvers.Add(pictureItemHtmlResolver.Name, pictureItemHtmlResolver);
         }

@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace FreeloadMap.Lib.Data.PictureItemTypes
+{
+    public interface ISVGGroupItem
+    {
+        /// <remarks>
+        /// 一般指cssSelector"svg > g > *"。
+        /// 当前直接用AddSVGGroupItem。
+        /// </remarks>
+        public string GetSVGContentHtml();
+    }
+}

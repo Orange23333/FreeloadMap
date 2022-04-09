@@ -95,8 +95,6 @@ namespace FreeloadMap.Lib.Data
             var includedStudents = from val in students
                                    where includedSchoolNames.Contains(val.SchoolName)
                                    select val;
-#warning Compile Bug
-            //includedSchoolNames = null;
             foreach (var includedStudent in includedStudents)
             {
                 SchoolInfo sameSchool;

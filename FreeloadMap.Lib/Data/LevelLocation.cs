@@ -129,9 +129,9 @@ namespace FreeloadMap.Lib.Data
             return r.ToString();
         }
 
-        public string ToShortString()
+        public string ToShortString(int startIndex = 0, string emptyText = "")
         {
-            int i, consecutiveDefaultIndexStartFrom;
+            int i, consecutiveDefaultIndexStartFrom; 
             StringBuilder r = new StringBuilder();
             string[] values = new string[]
             {
@@ -151,11 +151,11 @@ namespace FreeloadMap.Lib.Data
                 }
             }
 
-            if (consecutiveDefaultIndexStartFrom == 0)
+            if (consecutiveDefaultIndexStartFrom == 0 || consecutiveDefaultIndexStartFrom <= startIndex)
             {
-                return "";
+                return emptyText;
             }
-            for (i = 0; i < consecutiveDefaultIndexStartFrom - 1; i++)
+            for (i = startIndex; i < consecutiveDefaultIndexStartFrom - 1; i++)
             {
                 r.Append(values[i]);
                 r.Append(".");

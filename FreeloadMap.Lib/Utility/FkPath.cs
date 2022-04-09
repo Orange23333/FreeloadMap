@@ -7,6 +7,8 @@ using System.Text.RegularExpressions;
 
 namespace FreeloadMap.Lib.Utility
 {
+#warning 移到OurOpenSource里
+
     /// <remarks>
     /// 结尾的空格也算作路径的一部分。
     /// DirectorySeparator忽略出现意外值的情况，默认为Backslash。

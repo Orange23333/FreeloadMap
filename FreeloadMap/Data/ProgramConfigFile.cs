@@ -39,6 +39,7 @@ namespace FreeloadMap.Data
         public string GetValueOrDefault(string key)
         {
             Configs.TryGetValue(key, out string r);
+#warning csv没有null值，只有空字符串。
             if (r == null)
             {
                 return DefaultConfigs.GetValueOrDefault(key);
